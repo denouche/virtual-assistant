@@ -1,0 +1,27 @@
+{
+  "name": "virtual-assistant",
+  "version": "0.1.0",
+  "main": "index.js",
+  "description": "An extensible chat bot that can help you in a lot of tasks",
+  "dependencies": {
+    "@slack/client": "^3.8.0",
+    "bottleneck": "^1.13.1",
+    "entities": "^1.1.1",
+    "javascript-state-machine": "^2.3.5",
+    "lodash": "^4.17.3",
+    "memory-cache": "^0.1.6",
+    "object-path": "^0.11.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:denouche/virtual-assistant.git"
+  },
+  "author": "Antoine Leveugle",
+  "license": "ISC",
+  "devDependencies": {
+    "standard-version": "^4.0.0"
+  },
+  "scripts": {
+    "release": "standard-version"
+  }
+}
