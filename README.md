@@ -1,4 +1,4 @@
-node-virtual-assistant
+virtual-assistant
 ======================
 
 
