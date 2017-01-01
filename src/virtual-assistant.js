@@ -1,11 +1,12 @@
 const _ = require('lodash'),
     SlackService = require('./interface/slack-service'),
-    AssistantFeature = require('./feature/assistant-feature');
+    AssistantFeature = require('./feature/assistant-feature'),
+    Configuration = require('./feature/configuration/configuration');
 
 class VirtualAssistant {
 
 	constructor(featureList, interfaceList) {
-		this.featureList = featureList;
+		this.featureList = _.concat([Configuration], featureList);
 		this.slackService = null;
 		
 		if(interfaceList.slack) {
