@@ -17,11 +17,11 @@ class VirtualAssistant {
 	run() {
 		if(this.slackService) {
 			this.slackService.on('channel', (message, context) => {
-			    let regexpUser = /<@([^>]+)>/,
-			        matcher = message.match(regexpUser);
-			    if(matcher && matcher[1] === this.slackService.getAuthenticatedUserId()) {
+			    let regexpBot = new RegExp('<@' + this.slackService.getAuthenticatedUserId() + '>');
+			    if(regexpBot.test(message)) {
 			        // Someone talk to the bot
-			        this.onMessage(this.slackService, _.merge(context, {interfaceType: 'channel'}), message);
+			        let messageToHandle = message.replace(regexpBot, '');
+			        this.onMessage(this.slackService, _.merge(context, {interfaceType: 'channel'}), messageToHandle);
 			    }
 
 			});
