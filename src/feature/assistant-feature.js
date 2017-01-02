@@ -4,20 +4,29 @@ const _ = require('lodash'),
 
 class AssistantFeature {
 
+    /**
+    *   Override if needed
+    */
 	static getId(interfaceType, channelOrImId) {
         // string, The ID of this type of FSM.
         // You can concat the cannelOrImId to be able to run multiple FSM on differents channels or IMs.
-		throw new TypeError("Not implemented, please implement this function in sub class");
+        return this.prototype.constructor.name + '-' + interfaceType + '-' + channelOrImId;
 	}
 
+    /**
+    *   Override to add your own trigger keywords
+    */
 	static getTriggerKeywords() {
         // Array of string that will trigger the FSM to start
 		throw new TypeError("Not implemented, please implement this function in sub class");
 	}
 
+    /**
+    *   Override if needed
+    */
 	static getTTL() {
 		// In seconds
-		throw new TypeError("Not implemented, please implement this function in sub class");
+        return 0;
 	}
     
     static canHandle(message) {
@@ -88,13 +97,15 @@ class AssistantFeature {
     }
 
     resetTtl() {
-        this.constructor.getCache().del(this.id);
-        this.constructor.getCache().put(this.id, this, this.constructor.getTTL() * 1000, () => {
-            // In case of timeout this function is called
-            if(this.canTriggerEvent('end')) {
-                this.end();
-            }
-        });
+        if(this.constructor.getTTL() > 0) {
+            this.constructor.getCache().del(this.id);
+            this.constructor.getCache().put(this.id, this, this.constructor.getTTL() * 1000, () => {
+                // In case of timeout this function is called
+                if(this.canTriggerEvent('end')) {
+                    this.end();
+                }
+            });
+        }
     }
 
     handle(message, context) {

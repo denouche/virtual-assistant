@@ -17,18 +17,16 @@ class VirtualAssistant {
 	run() {
 		if(this.slackService) {
 			this.slackService.on('channel', (message, context) => {
-			    console.log('channel', message, "from", context.userId)
-			    let regexpUser = /^<@([^>]+)>:?\s*(.*)$/,
+			    let regexpUser = /<@([^>]+)>/,
 			        matcher = message.match(regexpUser);
-			    if(matcher && matcher[1] === this.slackService.getAuthenticatedUserId() && matcher[2]) {
+			    if(matcher && matcher[1] === this.slackService.getAuthenticatedUserId()) {
 			        // Someone talk to the bot
-			        this.onMessage(this.slackService, _.merge(context, {interfaceType: 'channel'}), matcher[2]);
+			        this.onMessage(this.slackService, _.merge(context, {interfaceType: 'channel'}), message);
 			    }
 
 			});
 
 			this.slackService.on('message', (message, context) => {
-			    console.log('im', message, "from", context.userId)
 			    this.onMessage(this.slackService, _.merge(context, {interfaceType: 'im'}), message);
 			});
 		}
