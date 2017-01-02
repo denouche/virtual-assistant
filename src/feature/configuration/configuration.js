@@ -47,11 +47,16 @@ class Configuration extends AssistantFeature {
 
     handle(message, context) {
         super.handle(message, context);
-        if(message.match(/^(?:fin|end|exit|stop|quit|quitter|bye)$/i) && this.canTriggerEvent('end')) {
-            this.end(context.userId);
+        if(this.current === 'none') {
+            this.startup();
         }
-        else if(this.canTriggerEvent('text')) {
-            this.text(message, context.userId);
+        else {
+            if(message.match(/^(?:fin|end|exit|stop|quit|quitter|bye)$/i) && this.canTriggerEvent('end')) {
+                this.end(context.userId);
+            }
+            else if(this.canTriggerEvent('text')) {
+                this.text(message, context.userId);
+            }
         }
     }
 
