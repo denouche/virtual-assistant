@@ -90,10 +90,12 @@ class VirtualAssistant {
 	        	}
 	        	toSend.push('Je peux vous aider à faire ces actions :');
 	        	this.featureList.forEach(function(feature) {
-	        		let desc = '•' + feature.getDescription(),
-	        			keys = _.slice(feature.getTriggerKeywords(), 0, 2);
-	        		desc += ' (pour ça dites moi "' + keys.join('", ou "') + '")';
-	        		toSend.push(desc);
+	        		if(feature.getDescription()) {
+		        		let desc = '•' + feature.getDescription(),
+		        			keys = _.slice(feature.getTriggerKeywords(), 0, 2);
+		        		desc += ' (pour ça dites moi "' + keys.join('", ou "') + '")';
+		        		toSend.push(desc);
+		        	}
 	        	});
 	        	fromInterface.send(context.channelId, toSend.join('\n'));
 	        }
