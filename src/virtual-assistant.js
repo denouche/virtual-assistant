@@ -6,7 +6,7 @@ const _ = require('lodash'),
 class VirtualAssistant {
 
 	constructor(featureList, interfaceList) {
-		this.featureList = _.concat([Configuration], featureList);
+		this.featureList = _.concat(featureList, Configuration);
 		this.slackService = null;
 		
 		if(interfaceList.slack) {
