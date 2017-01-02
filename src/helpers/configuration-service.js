@@ -15,7 +15,7 @@ class ConfigurationService {
     }
 
     static set(key, value) {
-        let currentConfig = get();
+        let currentConfig = this.get();
         objectPath.set(currentConfig, key, value);
         fs.writeFileSync(this.getFilename(), JSON.stringify(currentConfig, null, 4));
     }
