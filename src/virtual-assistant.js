@@ -62,8 +62,6 @@ class VirtualAssistant {
 	}
 
 	onMessage(fromInterface, context, message) {
-	    console.log('onMessage', context, message);
-	    
 	    let fsmCacheId = this.getCurrentFeatureCacheId(context.interfaceType, context.channelId);
 
 	    if(AssistantFeature.getCache().get(fsmCacheId)) {
@@ -85,13 +83,16 @@ class VirtualAssistant {
 	            }
 	        }
 	        else {
-	            // Someone is talking to the bot but no FSM to handle that.
-	            // List help
-	            // TODO
-	            // Un genre de catch all qui irait lister les FSM, leur description (static getDescription), et lister :
-	            // je peux : - aider à remplir ton CRA, pour ça dit "CRA", ou "compte rendu",
-	            // Jouer au morpion, pour ça dit moi "morpion", ou "tic tac toe"
-	            // Tirer les keywords de static getTriggerKeyworks()
+	        	let toSend = [
+	        		'Je ne suis pas sûr de comprendre.',
+	        		'Je peux vous aider à faire ces actions :'];
+	        	this.featureList.forEach(function(feature) {
+	        		let desc = '•' + feature.getDescription(),
+	        			keys = _.slice(feature.getTriggerKeywords(), 0, 2);
+	        		desc += ' (pour ça dites moi "' + keys.join('", ou "') + '")';
+	        		toSend.push(desc);
+	        	});
+	        	fromInterface.send(context.channelId, toSend.join('\n'));
 	        }
 	    }
 	}

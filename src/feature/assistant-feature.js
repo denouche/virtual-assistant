@@ -22,6 +22,14 @@ class AssistantFeature {
 	}
 
     /**
+    *   Override to add the description of the feature this class provide
+    */
+    static getDescription() {
+        // Array of string that will trigger the FSM to start
+        throw new TypeError("Not implemented, please implement this function in sub class");
+    }
+
+    /**
     *   Override if needed
     */
 	static getTTL() {
@@ -79,12 +87,7 @@ class AssistantFeature {
     send(message, channelId) {
         var toSend = '';
         if(_.isArray(message)) {
-            _.forEach(message, function(m, index) {
-                toSend += m;
-                if(index < (message.length - 1)) {
-                    toSend += '\n';
-                }
-            });
+            toSend = message.join('\n');
         }
         else {
             toSend = message;

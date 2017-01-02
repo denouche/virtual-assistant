@@ -15,6 +15,10 @@ class Configuration extends AssistantFeature {
         ];
     }
 
+    static getDescription() {
+        return 'Vous permettre de configurer mes paramètres';
+    }
+
     static getTTL() {
         return 1 /* min */ * 60;
     }
