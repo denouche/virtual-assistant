@@ -83,9 +83,12 @@ class VirtualAssistant {
 	            }
 	        }
 	        else {
-	        	let toSend = [
-	        		'Je ne suis pas sûr de comprendre.',
-	        		'Je peux vous aider à faire ces actions :'];
+	        	let toSend = [];
+	        	if(!/(?:aide|help)/.test(message)) {
+	        		// Si il ne demande pas d'aide, alors on a pas compris
+	        		toSend.push('Je ne suis pas sûr de comprendre.');
+	        	}
+	        	toSend.push('Je peux vous aider à faire ces actions :');
 	        	this.featureList.forEach(function(feature) {
 	        		let desc = '•' + feature.getDescription(),
 	        			keys = _.slice(feature.getTriggerKeywords(), 0, 2);
