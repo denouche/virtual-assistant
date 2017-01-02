@@ -78,7 +78,7 @@ class VirtualAssistant {
 	                let foundFsm = foundItems[0],
 	                    fsmId = foundFsm.getId(context.interfaceType, context.channelId);
 	                let newFsm = new foundFsm(fromInterface, context, fsmId);
-	                newFsm.startup();
+	                newFsm.handle(message);
 	            }
 	            else {
 	                console.error('Multiple features matching text ', message);
