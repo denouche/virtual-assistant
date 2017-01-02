@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.3"></a>
+## [0.6.3](https://github.com/denouche/virtual-assistant/compare/v0.6.2...v0.6.3) (2017-01-02)
+
+
+### Bug Fixes
+
+* reorder feature list ([d7f49f8](https://github.com/denouche/virtual-assistant/commit/d7f49f8))
+
+
+
 <a name="0.6.2"></a>
 ## [0.6.2](https://github.com/denouche/virtual-assistant/compare/v0.6.1...v0.6.2) (2017-01-02)
 
