@@ -63,7 +63,7 @@ class AssistantFeature {
 	    //    game: [[],[],[]]
 	    //  }
 	    // }
-        initAssistantFeature(interfac, context, id);
+        this.initAssistantFeature(interfac, context, id);
     }
 
     initAssistantFeature(interfac, context, id) {
