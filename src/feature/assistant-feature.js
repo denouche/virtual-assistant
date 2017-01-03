@@ -57,11 +57,16 @@ class AssistantFeature {
 	    // { 
 	    //  userId: xxx, // the user who launched the fsm
         //  channelId: xxx, // the channel where the fsm was launched
+        //  interfaceType: im|channel // The interface type where the feature was initialy launched
 	    //  model: {
 	    //    currentPlayer: -1|1
 	    //    game: [[],[],[]]
 	    //  }
 	    // }
+        initAssistantFeature(interfac, context, id);
+    }
+
+    initAssistantFeature(interfac, context, id) {
         this.interface = interfac;
         this.id = id;
         this.context = context;
@@ -95,7 +100,7 @@ class AssistantFeature {
         this.interface.send(channelId || this.context.channelId, toSend);
     }
 
-    endAndClearCache() {
+    clearCache() {
         this.constructor.getCache().del(this.id);
     }
 
