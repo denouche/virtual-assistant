@@ -132,7 +132,7 @@ class Configuration extends AssistantFeature {
 
     onEnd(event, from, to) {
         this.send('Fin du mode configuration');
-        this.endAndClearCache();
+        this.clearCache();
     }
 
 }
