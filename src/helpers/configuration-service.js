@@ -28,7 +28,7 @@ class ConfigurationService {
     }
 
     static remove(key) {
-        var currentConfig = get();
+        var currentConfig = this.get();
         objectPath.del(currentConfig, key);
         fs.writeFileSync(this.getFilename(), JSON.stringify(currentConfig, null, 4));
     }
