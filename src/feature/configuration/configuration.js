@@ -104,6 +104,7 @@ class Configuration extends AssistantFeature {
             setRegexp = /^set\s+([^\s]+)\s([^\s]+)$/,
             deleteRegexp = /^delete\s+([^\s]+)$/,
             matcher;
+        try {
         if(getRegexp.test(text)) {
             matcher = text.match(getRegexp);
             var config = ConfigurationService.get(matcher[1]);
@@ -126,6 +127,10 @@ class Configuration extends AssistantFeature {
         }
         else {
             this.send("Je n'ai pas compris votre demande.");
+        }
+        }
+        catch(e) {
+            console.error('Error on configuration Text state', e);
         }
         this.wait();
     }
