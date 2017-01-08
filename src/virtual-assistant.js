@@ -21,62 +21,73 @@ class VirtualAssistant {
 			    if(regexpBot.test(message)) {
 			        // Someone talk to the bot
 			        let messageToHandle = message.replace(regexpBot, '');
-			        this.onMessage(this.slackService, _.merge(context, {interfaceType: 'channel'}), messageToHandle);
+			        this._onMessage(this.slackService, _.merge(context, {interfaceType: 'channel'}), messageToHandle);
 			    }
 
 			});
 
 			this.slackService.on('message', (message, context) => {
-			    this.onMessage(this.slackService, _.merge(context, {interfaceType: 'im'}), message);
+			    this._onMessage(this.slackService, _.merge(context, {interfaceType: 'im'}), message);
 			});
 		}
 	}
 
 
-	getFeatureHandling(text) {
+	_getFeatureHandling(text) {
 	    return _.filter(this.featureList, function(e) {
 	        return e.canHandle(text);
 	    });
 	}
 
-	getCurrentFeatureCacheId(interfaceType, currentChannelId) {
-	    // D'abord on regarde si une FSM est active sur le channel
-	    // Si on est sur un IM alors dans tous les cas on ne trouvera rien là
-	    // Ensuite si non, on regarde si une FSM est active sur le IM (interfaceType)
-
-	    let fsmForChannel = _.find(this.featureList, function(o) {
-	        return !!AssistantFeature.getCache().get(o.getId('channel', currentChannelId));
-	    });
-	    if(fsmForChannel) {
-	        return fsmForChannel.getId('channel', currentChannelId);
-	    }
-
-	    let fsmForCurrentInterfaceType = _.find(this.featureList, function(o) {
-	        return !!AssistantFeature.getCache().get(o.getId(interfaceType, currentChannelId));
-	    });
-	    if(fsmForCurrentInterfaceType) {
-	        return fsmForCurrentInterfaceType.getId(interfaceType, currentChannelId);
-	    }
-
-	    return null;
+	_getCacheId(scope, channelId) {
+		return scope === AssistantFeature.scopes.GLOBAL ? AssistantFeature.scopes.GLOBAL : [scope, channelId].join('-');
 	}
 
-	onMessage(fromInterface, context, message) {
-	    let fsmCacheId = this.getCurrentFeatureCacheId(context.interfaceType, context.channelId);
+	_getCurrentFeatureCacheId(currentChannelId) {
+	    // OLD : D'abord on regarde si une feature est active sur le channel
+	    // OLD : Si on est sur un IM alors dans tous les cas on ne trouvera rien là
+	    // OLD : Ensuite si non, on regarde si une feature est active sur le IM (interfaceType)
 
-	    if(AssistantFeature.getCache().get(fsmCacheId)) {
-	        let fsm = AssistantFeature.getCache().get(fsmCacheId);
-	        fsm.handle(message, context);
+	    let cacheKey = this._getCacheId(AssistantFeature.scopes.GLOBAL, currentChannelId);
+	    if(AssistantFeature.getCache().keys().indexOf(cacheKey) !== -1) {
+    		// Global feature currently running, take it
+    		// TODO: possibility to get out of the global feature currently running, for specific user.
+    		// For example : Regexp challenge is running but one specific user want to play tic tac toe in IM
+    		return cacheKey;
+    	}
+    	else {
+    		// Sinon on regarde si une des feature est active en local sur le channel actuel
+    		let foundFeature = false;
+    		_.forEach(this.featureList, (o) => {
+    			if(!foundFeature) {
+	    			let currentCacheId = this._getCacheId(o.getScope(), currentChannelId);
+		    		if(AssistantFeature.getCache().keys().indexOf(currentCacheId) !== -1) {
+		    			foundFeature = true;
+		    			cacheKey = currentCacheId;
+		    		}
+		    	}
+    		});
+    		return foundFeature ? cacheKey : null;
+    	}
+	}
+
+	_onMessage(fromInterface, context, message) {
+	    let featureCacheId = this._getCurrentFeatureCacheId(context.channelId);
+
+	    if(AssistantFeature.getCache().get(featureCacheId)) {
+	        let feature = AssistantFeature.getCache().get(featureCacheId);
+	        feature.handle(message, context);
+	        feature.postHandle(message, context);
 	    }
 	    else {
-	        let foundItems = this.getFeatureHandling(message);
+	        let foundItems = this._getFeatureHandling(message);
 	        console.log('foundItems', foundItems);
 	        if(foundItems && foundItems.length > 0) {
 	            if(foundItems.length === 1) {
-	                let foundFsm = foundItems[0],
-	                    fsmId = foundFsm.getId(context.interfaceType, context.channelId);
-	                let newFsm = new foundFsm(fromInterface, context, fsmId);
-	                newFsm.handle(message);
+	                let foundFeature = foundItems[0],
+	                	featureId = this._getCacheId(foundFeature.getScope(), context.channelId);
+	                let newFeature = new foundFeature(fromInterface, context, featureId);
+	                newFeature.handle(message);
 	            }
 	            else {
 	                console.error('Multiple features matching text ', message);

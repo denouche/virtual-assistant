@@ -5,10 +5,6 @@ const AssistantFeature = require('../assistant-feature'),
 
 class Configuration extends AssistantFeature {
 
-    static getId(interfaceType, channelOrImId) {
-        return 'Configuration-' + interfaceType + '-' + channelOrImId;
-    }
-
     static getTriggerKeywords() {
         return [
             'configuration', 'config'
@@ -33,7 +29,7 @@ class Configuration extends AssistantFeature {
                 console.error('Uncatched error',  'event ' + eventName + ' was naughty :- ' + errorMessage)
                 console.error(args)
             },
-            initial: { state: 'Help', event: 'startup', defer: true }, // defer is important since the startup event is launched after the fsm is stored in cache
+            initial: { state: 'Help', event: 'startup', defer: true }, // defer is important since the startup event is launched after the feature is stored in cache
             terminal: 'End',
             events: [
                 { name: 'startup', from: 'none', to: 'Help' },
@@ -50,7 +46,6 @@ class Configuration extends AssistantFeature {
     }
 
     handle(message, context) {
-        super.handle(message, context);
         if(this.current === 'none') {
             this.startup();
         }
@@ -70,7 +65,7 @@ class Configuration extends AssistantFeature {
     onHelp(event, from, to) {
         if(this.context.interfaceType === 'im') {
             var fromUser = SlackService.getDataStore().getUserById(this.context.userId);
-            if(fromUser.is_admin || 'U2Q4ALC6B' === this.context.userId /* xee */ || 'U0DHA6T5L' === this.context.userId /* sfeirgroup*/) {
+            if(fromUser.is_admin || 'U2Q4ALC6B' === this.context.userId /* elio */ || 'U0DHA6T5L' === this.context.userId /* group */) {
                 var toSend = [
                     'Mode configuration activé, dites "fin" pour le quitter.',
                     'Voici la configuration actuelle :```',

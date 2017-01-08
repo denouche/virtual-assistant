@@ -4,20 +4,29 @@ const _ = require('lodash'),
 
 class AssistantFeature {
 
+    static get scopes() {
+        return {
+            GLOBAL: 'GLOBAL',
+            LOCAL: 'LOCAL'
+        };
+    }
+
     /**
     *   Override if needed
     */
-	static getId(interfaceType, channelOrImId) {
-        // string, The ID of this type of FSM.
-        // You can concat the cannelOrImId to be able to run multiple FSM on differents channels or IMs.
-        return this.prototype.constructor.name + '-' + interfaceType + '-' + channelOrImId;
-	}
+    static getScope() {
+        // Optionnal, default value is AssistantFeature.scopes.LOCAL
+        // return here the scope of this feature.
+        // Availables scopes are available in AssistantFeature.scopes
+        // Default value is AssistantFeature.scopes.LOCAL
+        return AssistantFeature.scopes.LOCAL;
+    }
 
     /**
     *   Override to add your own trigger keywords
     */
 	static getTriggerKeywords() {
-        // Array of string that will trigger the FSM to start
+        // Array of string that will trigger the feature to start
 		throw new TypeError("Not implemented, please implement this function in sub class");
 	}
 
@@ -25,7 +34,8 @@ class AssistantFeature {
     *   Override to add the description of the feature this class provide
     */
     static getDescription() {
-        // Array of string that will trigger the FSM to start
+        // return here the description of your feature.
+        // This description will be used for the help text of the bot
         throw new TypeError("Not implemented, please implement this function in sub class");
     }
 
@@ -33,7 +43,10 @@ class AssistantFeature {
     *   Override if needed
     */
 	static getTTL() {
-		// In seconds
+        // Optionnal, default value is 0
+        // In seconds
+        // Setting this to > 0 will keep the feature state for the given duration
+        // Set to 0 to disable the persistence of this feature
         return 0;
 	}
     
@@ -55,18 +68,18 @@ class AssistantFeature {
     constructor(interfac, context, id) {
 	    // context is : 
 	    // { 
-	    //  userId: xxx, // the user who launched the fsm
-        //  channelId: xxx, // the channel where the fsm was launched
+	    //  userId: xxx, // the user who launched the feature
+        //  channelId: xxx, // the channel where the feature was launched
         //  interfaceType: im|channel // The interface type where the feature was initialy launched
 	    //  model: {
 	    //    currentPlayer: -1|1
 	    //    game: [[],[],[]]
 	    //  }
 	    // }
-        this.initAssistantFeature(interfac, context, id);
+        this._initAssistantFeature(interfac, context, id);
     }
 
-    initAssistantFeature(interfac, context, id) {
+    _initAssistantFeature(interfac, context, id) {
         this.interface = interfac;
         this.id = id;
         this.context = context;
@@ -105,7 +118,8 @@ class AssistantFeature {
     }
 
     resetTtl() {
-        if(this.constructor.getTTL() > 0) {
+        if(this.constructor.getTTL()
+            && this.constructor.getTTL() > 0) {
             this.constructor.getCache().del(this.id);
             this.constructor.getCache().put(this.id, this, this.constructor.getTTL() * 1000, () => {
                 // In case of timeout this function is called
@@ -117,9 +131,7 @@ class AssistantFeature {
     }
 
     handle(message, context) {
-        this.resetTtl();
-
-/*
+        /*
         // TODO lister les transitions possibles
         console.log(this.transitions());
         this.send("Je n'ai pas compris votre réponse");
@@ -128,6 +140,10 @@ class AssistantFeature {
             this.send('Vous devez répondre par oui ou par non');
         }
         return false;*/
+    }
+
+    postHandle(message, context) {
+        this.resetTtl();
     }
 
 	
