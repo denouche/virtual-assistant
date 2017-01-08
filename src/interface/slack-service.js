@@ -21,15 +21,21 @@ class SlackService extends EventEmitter {
         return this.dataStore;
     }
 
-    constructor(slackToken) {
+    constructor(options) {
         super();
         
-        this.slackToken = slackToken;
+        this.slackToken = options.token;
+        this.administrators = options.administrators || [];
+
         this.slack = null; // RtmClient
         this.authenticatedUserId = null; // Current bot id
 
         this.init();
         this.slack.start();
+    }
+
+    isAdministrator(userId) {
+        return this.administrators.indexOf(userId) !== -1;
     }
 
     getAuthenticatedUserId() {

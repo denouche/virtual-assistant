@@ -65,7 +65,7 @@ class Configuration extends AssistantFeature {
     onHelp(event, from, to) {
         if(this.context.interfaceType === 'im') {
             var fromUser = SlackService.getDataStore().getUserById(this.context.userId);
-            if(fromUser.is_admin || 'U2Q4ALC6B' === this.context.userId /* elio */ || 'U0DHA6T5L' === this.context.userId /* group */) {
+            if(fromUser.is_admin || this.interface.isAdministrator(this.context.userId)) {
                 var toSend = [
                     'Mode configuration activé, dites "fin" pour le quitter.',
                     'Voici la configuration actuelle :```',

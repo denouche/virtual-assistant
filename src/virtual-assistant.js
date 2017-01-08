@@ -5,12 +5,22 @@ const _ = require('lodash'),
 
 class VirtualAssistant {
 
-	constructor(featureList, interfaceList) {
+	/**
+		options = {
+	        slack: { 
+	        	token: process.env.SLACK_TOKEN,
+	        	administrators: [] // if needed, give here the user ids that are administrator of the bot.
+							        // The default administrators are the slack administrator, but this array can allow to add administrator for the bot but not for the entire slack
+							        // The slack administrator will remain administrators of the but even if you don't give them in the array.
+	        }
+	    };
+	*/
+	constructor(featureList, options) {
 		this.featureList = _.concat(featureList, Configuration);
 		this.slackService = null;
 		
-		if(interfaceList.slack) {
-			this.slackService = new SlackService(interfaceList.slack.token);
+		if(options.slack) {
+			this.slackService = new SlackService(options.slack);
 		}
 	}
 
