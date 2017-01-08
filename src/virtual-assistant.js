@@ -49,45 +49,72 @@ class VirtualAssistant {
 	    });
 	}
 
-	_getCacheId(scope, channelId) {
-		return scope === AssistantFeature.scopes.GLOBAL ? AssistantFeature.scopes.GLOBAL : [scope, channelId].join('-');
+	_getCacheId(scope, channelId, userId) {
+		// channel, group ou im
+		let datastore = SlackService.getDataStore();
+		if(datastore.getChannelById(channelId)
+			|| datastore.getGroupById(channelId)) {
+			// On est dans un channel/group
+			switch(scope) {
+				case AssistantFeature.scopes.GLOBAL:
+					// Global + tous les ims
+					return AssistantFeature.scopes.GLOBAL;
+				case AssistantFeature.scopes.LOCAL:
+					// Local au channel/group en cours, on concatene le channelId pour la clé du cache
+					return [scope, channelId].join('-');
+			}
+		}
+		else if(datastore.getDMById(channelId)) {
+			// on est dans un IM
+			switch(scope) {
+				case AssistantFeature.scopes.GLOBAL:
+					// Global + tous les ims
+					
+					// Avant de retourner ici, on vérifie le channel courant de la feature
+					let feat = AssistantFeature.getCache().get(AssistantFeature.scopes.GLOBAL);
+					if(feat) {
+						let channelFeat = feat.context.channelId;
+						let channelOrGroup = datastore.getChannelById(channelFeat) || datastore.getGroupById(channelFeat);
+						if(channelOrGroup && channelOrGroup.members.indexOf(userId) !== -1) {
+							return AssistantFeature.scopes.GLOBAL;
+						}
+						// Si le user n'est pas dans ce channel/group, une éventuelle feature courante ne le concerne pas, même globale
+						return null;
+					}
+					// Ici ça veut dire qu'on a pas de feature global en cours, on va donc la créer, mais en local seulement
+					return [scope, channelId].join('-');
+				case AssistantFeature.scopes.LOCAL:
+					// Local au channel/group en cours, on concatene le channelId pour la clé du cache
+					return [scope, channelId].join('-');
+			}
+
+			return [scope, channelId].join('-');
+		}
+		// On ne devrait pas passer ici
+		console.warn('_getCacheId', channelId, userId, 'Not in channel, groups, or ims');
+		return null;
 	}
 
-	_getCurrentFeatureCacheId(currentChannelId) {
-	    // OLD : D'abord on regarde si une feature est active sur le channel
-	    // OLD : Si on est sur un IM alors dans tous les cas on ne trouvera rien là
-	    // OLD : Ensuite si non, on regarde si une feature est active sur le IM (interfaceType)
-
-	    let cacheKey = this._getCacheId(AssistantFeature.scopes.GLOBAL, currentChannelId);
-	    if(AssistantFeature.getCache().keys().indexOf(cacheKey) !== -1) {
-    		// Global feature currently running, take it
-    		// TODO: possibility to get out of the global feature currently running, for specific user.
-    		// For example : Regexp challenge is running but one specific user want to play tic tac toe in IM
-    		return cacheKey;
-    	}
-    	else {
-    		// Sinon on regarde si une des feature est active en local sur le channel actuel
-    		let foundFeature = false;
-    		_.forEach(this.featureList, (o) => {
-    			if(!foundFeature) {
-	    			let currentCacheId = this._getCacheId(o.getScope(), currentChannelId);
-		    		if(AssistantFeature.getCache().keys().indexOf(currentCacheId) !== -1) {
-		    			foundFeature = true;
-		    			cacheKey = currentCacheId;
-		    		}
-		    	}
-    		});
-    		return foundFeature ? cacheKey : null;
-    	}
+	_getCurrentFeatureCacheId(context) {
+    	let cacheKey = null;
+		_.forEach(this.featureList, (o) => {
+			if(!cacheKey) {
+    			let currentCacheId = this._getCacheId(o.getScope(), context.channelId, context.userId);
+	    		if(currentCacheId && AssistantFeature.getCache().keys().indexOf(currentCacheId) !== -1) {
+	    			cacheKey = currentCacheId;
+	    		}
+	    	}
+		});
+		return cacheKey || null;
 	}
 
 	_onMessage(fromInterface, context, message) {
-	    let featureCacheId = this._getCurrentFeatureCacheId(context.channelId);
+	    let featureCacheId = this._getCurrentFeatureCacheId(context);
 
-	    if(AssistantFeature.getCache().get(featureCacheId)) {
+	    if(featureCacheId && AssistantFeature.getCache().get(featureCacheId)) {
 	        let feature = AssistantFeature.getCache().get(featureCacheId);
+	        feature.preHandle(message, context);
 	        feature.handle(message, context);
-	        feature.postHandle(message, context);
 	    }
 	    else {
 	        let foundItems = this._getFeatureHandling(message);
@@ -95,9 +122,10 @@ class VirtualAssistant {
 	        if(foundItems && foundItems.length > 0) {
 	            if(foundItems.length === 1) {
 	                let foundFeature = foundItems[0],
-	                	featureId = this._getCacheId(foundFeature.getScope(), context.channelId);
+	                	featureId = this._getCacheId(foundFeature.getScope(), context.channelId, context.userId);
 	                let newFeature = new foundFeature(fromInterface, context, featureId);
-	                newFeature.handle(message);
+	                newFeature.preHandle(message, context);
+	                newFeature.handle(message, context);
 	            }
 	            else {
 	                console.error('Multiple features matching text ', message);

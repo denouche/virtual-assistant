@@ -6,8 +6,12 @@ class AssistantFeature {
 
     static get scopes() {
         return {
-            GLOBAL: 'GLOBAL',
-            LOCAL: 'LOCAL'
+            GLOBAL: 'GLOBAL', // si lancé sur un channel, channel + tous les im   &&   si lancé sur un im, im
+            LOCAL: 'LOCAL', // si lancé sur un channel, channel   &&   si lancé sur un im, im
+            // TODO 
+            // PRIVATE_ONLY // seulement en IM
+            // PUBLIC_ONLY // seulement en public
+            // entre deux personnes ?
         };
     }
 
@@ -88,7 +92,7 @@ class AssistantFeature {
     }
 
     canTriggerEvent(name) {
-        return (this.transitions().indexOf(name) !== -1 || name === 'end') && this.can(name);
+        return this.transitions && (this.transitions().indexOf(name) !== -1 || name === 'end') && this.can(name);
     }
 
     onenterstate(event, from, to) {
@@ -130,6 +134,10 @@ class AssistantFeature {
         }
     }
 
+    preHandle(message, context) {
+        this.resetTtl();
+    }
+
     handle(message, context) {
         /*
         // TODO lister les transitions possibles
@@ -140,10 +148,6 @@ class AssistantFeature {
             this.send('Vous devez répondre par oui ou par non');
         }
         return false;*/
-    }
-
-    postHandle(message, context) {
-        this.resetTtl();
     }
 
 	
