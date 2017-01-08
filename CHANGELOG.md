@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.1"></a>
+## [0.8.1](https://github.com/denouche/virtual-assistant/compare/v0.8.0...v0.8.1) (2017-01-08)
+
+
+### Bug Fixes
+
+* feature cache key generation was bugguy ([8d10d68](https://github.com/denouche/virtual-assistant/commit/8d10d68))
+
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/denouche/virtual-assistant/compare/v0.7.4...v0.8.0) (2017-01-08)
 
