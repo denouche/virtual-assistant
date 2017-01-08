@@ -49,57 +49,11 @@ class VirtualAssistant {
 	    });
 	}
 
-	_getCacheId(scope, channelId, userId) {
-		// channel, group ou im
-		let datastore = SlackService.getDataStore();
-		if(datastore.getChannelById(channelId)
-			|| datastore.getGroupById(channelId)) {
-			// On est dans un channel/group
-			switch(scope) {
-				case AssistantFeature.scopes.GLOBAL:
-					// Global + tous les ims
-					return AssistantFeature.scopes.GLOBAL;
-				case AssistantFeature.scopes.LOCAL:
-					// Local au channel/group en cours, on concatene le channelId pour la clé du cache
-					return [scope, channelId].join('-');
-			}
-		}
-		else if(datastore.getDMById(channelId)) {
-			// on est dans un IM
-			switch(scope) {
-				case AssistantFeature.scopes.GLOBAL:
-					// Global + tous les ims
-					
-					// Avant de retourner ici, on vérifie le channel courant de la feature
-					let feat = AssistantFeature.getCache().get(AssistantFeature.scopes.GLOBAL);
-					if(feat) {
-						let channelFeat = feat.context.channelId;
-						let channelOrGroup = datastore.getChannelById(channelFeat) || datastore.getGroupById(channelFeat);
-						if(channelOrGroup && channelOrGroup.members.indexOf(userId) !== -1) {
-							return AssistantFeature.scopes.GLOBAL;
-						}
-						// Si le user n'est pas dans ce channel/group, une éventuelle feature courante ne le concerne pas, même globale
-						return null;
-					}
-					// Ici ça veut dire qu'on a pas de feature global en cours, on va donc la créer, mais en local seulement
-					return [scope, channelId].join('-');
-				case AssistantFeature.scopes.LOCAL:
-					// Local au channel/group en cours, on concatene le channelId pour la clé du cache
-					return [scope, channelId].join('-');
-			}
-
-			return [scope, channelId].join('-');
-		}
-		// On ne devrait pas passer ici
-		console.warn('_getCacheId', channelId, userId, 'Not in channel, groups, or ims');
-		return null;
-	}
-
 	_getCurrentFeatureCacheId(context) {
     	let cacheKey = null;
 		_.forEach(this.featureList, (o) => {
 			if(!cacheKey) {
-    			let currentCacheId = this._getCacheId(o.getScope(), context.channelId, context.userId);
+    			let currentCacheId = o.getCacheId(context.channelId, context.userId);
 	    		if(currentCacheId && AssistantFeature.getCache().keys().indexOf(currentCacheId) !== -1) {
 	    			cacheKey = currentCacheId;
 	    		}
@@ -123,9 +77,8 @@ class VirtualAssistant {
 	        console.log('foundItems', foundItems);
 	        if(foundItems && foundItems.length > 0) {
 	            if(foundItems.length === 1) {
-	                let foundFeature = foundItems[0],
-	                	featureId = this._getCacheId(foundFeature.getScope(), context.channelId, context.userId);
-	                let newFeature = new foundFeature(fromInterface, context, featureId);
+	                let foundFeature = foundItems[0];
+	                let newFeature = new foundFeature(fromInterface, context);
 	                let result = newFeature.preHandle(message, context);
 	                if(result) {
 	                	newFeature.handle(message, context);

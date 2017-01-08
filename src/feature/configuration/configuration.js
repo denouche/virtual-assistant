@@ -21,8 +21,8 @@ class Configuration extends AssistantFeature {
 
 
 
-    constructor(interfac, context, id) {
-        super(interfac, context, id);
+    constructor(interfac, context) {
+        super(interfac, context);
         StateMachine.create({
             target: Configuration.prototype,
             error: function(eventName, from, to, args, errorCode, errorMessage) {
