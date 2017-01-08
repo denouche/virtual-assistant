@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/denouche/virtual-assistant/compare/v0.7.4...v0.8.0) (2017-01-08)
+
+
+### Features
+
+* allow to configure administrators for the bot in addition to default slack administrators ([17563c4](https://github.com/denouche/virtual-assistant/commit/17563c4))
+* rework cache id generation, remove getId function and replace it with getScope ([0c2ba5f](https://github.com/denouche/virtual-assistant/commit/0c2ba5f))
+* storage service ([ed1b5ad](https://github.com/denouche/virtual-assistant/commit/ed1b5ad))
+
+
+
 <a name="0.7.4"></a>
 ## [0.7.4](https://github.com/denouche/virtual-assistant/compare/v0.7.3...v0.7.4) (2017-01-06)
 
