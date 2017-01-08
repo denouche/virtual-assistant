@@ -113,8 +113,10 @@ class VirtualAssistant {
 
 	    if(featureCacheId && AssistantFeature.getCache().get(featureCacheId)) {
 	        let feature = AssistantFeature.getCache().get(featureCacheId);
-	        feature.preHandle(message, context);
-	        feature.handle(message, context);
+	        let result = feature.preHandle(message, context);
+	        if(result) {
+	        	feature.handle(message, context);
+	        }
 	    }
 	    else {
 	        let foundItems = this._getFeatureHandling(message);
@@ -124,8 +126,10 @@ class VirtualAssistant {
 	                let foundFeature = foundItems[0],
 	                	featureId = this._getCacheId(foundFeature.getScope(), context.channelId, context.userId);
 	                let newFeature = new foundFeature(fromInterface, context, featureId);
-	                newFeature.preHandle(message, context);
-	                newFeature.handle(message, context);
+	                let result = newFeature.preHandle(message, context);
+	                if(result) {
+	                	newFeature.handle(message, context);
+	                }
 	            }
 	            else {
 	                console.error('Multiple features matching text ', message);

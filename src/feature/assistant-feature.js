@@ -136,6 +136,7 @@ class AssistantFeature {
 
     preHandle(message, context) {
         this.resetTtl();
+        return true;
     }
 
     handle(message, context) {
