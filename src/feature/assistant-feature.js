@@ -122,8 +122,7 @@ class AssistantFeature {
         //  channelId: xxx, // the channel where the feature was launched
         //  interfaceType: im|channel // The interface type where the feature was initialy launched
 	    //  model: {
-	    //    currentPlayer: -1|1
-	    //    game: [[],[],[]]
+        //      // put your feature model here, this will be persisted
 	    //  }
 	    // }
         this.initAssistantFeature(interfac, context);
