@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/denouche/virtual-assistant/compare/v0.10.0...v0.11.0) (2017-01-10)
+
+
+### Bug Fixes
+
+* remove old comment ([00b36e0](https://github.com/denouche/virtual-assistant/commit/00b36e0))
+
+
+### Features
+
+* remove adherence between features and slack service, use the interface field to get informations ([f8fc116](https://github.com/denouche/virtual-assistant/commit/f8fc116))
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/denouche/virtual-assistant/compare/v0.9.0...v0.10.0) (2017-01-08)
 
