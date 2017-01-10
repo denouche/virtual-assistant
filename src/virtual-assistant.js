@@ -49,11 +49,11 @@ class VirtualAssistant {
 	    });
 	}
 
-	_getCurrentFeatureCacheId(context) {
+	_getCurrentFeatureCacheId(interfac, context) {
     	let cacheKey = null;
 		_.forEach(this.featureList, (o) => {
 			if(!cacheKey) {
-    			let currentCacheId = o.getCacheId(context.channelId, context.userId);
+    			let currentCacheId = o.getCacheId(interfac, context.channelId, context.userId);
 	    		if(currentCacheId && AssistantFeature.getCache().keys().indexOf(currentCacheId) !== -1) {
 	    			cacheKey = currentCacheId;
 	    		}
@@ -63,7 +63,7 @@ class VirtualAssistant {
 	}
 
 	_onMessage(fromInterface, context, message) {
-	    let featureCacheId = this._getCurrentFeatureCacheId(context);
+	    let featureCacheId = this._getCurrentFeatureCacheId(fromInterface, context);
 
 	    if(featureCacheId && AssistantFeature.getCache().get(featureCacheId)) {
 	        let feature = AssistantFeature.getCache().get(featureCacheId);

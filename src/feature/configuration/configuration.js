@@ -1,7 +1,6 @@
 const AssistantFeature = require('../assistant-feature'),
     StateMachine = require('javascript-state-machine'),
-    ConfigurationService = require('../../helpers/configuration-service.js'),
-    SlackService = require('../../interface/slack-service');
+    ConfigurationService = require('../../helpers/configuration-service.js');
 
 class Configuration extends AssistantFeature {
 
@@ -64,7 +63,7 @@ class Configuration extends AssistantFeature {
 
     onHelp(event, from, to) {
         if(this.context.interfaceType === 'im') {
-            var fromUser = SlackService.getDataStore().getUserById(this.context.userId);
+            var fromUser = this.interface.getDataStore().getUserById(this.context.userId);
             if(fromUser.is_admin || this.interface.isAdministrator(this.context.userId)) {
                 var toSend = [
                     'Mode configuration activé, dites "fin" pour le quitter.',

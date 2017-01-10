@@ -1,5 +1,4 @@
-const _ = require('lodash'),
-    SlackService = require('../interface/slack-service');
+const _ = require('lodash');
 
 
 class AssistantFeature {
@@ -67,9 +66,9 @@ class AssistantFeature {
         return this.cache;
     }
 
-    static getCacheId(channelId, userId) {
+    static getCacheId(interfac, channelId, userId) {
         // channel, group ou im
-        let datastore = SlackService.getDataStore();
+        let datastore = interfac.getDataStore();
         if(datastore.getChannelById(channelId)
             || datastore.getGroupById(channelId)) {
             // On est dans un channel/group
@@ -130,7 +129,7 @@ class AssistantFeature {
 
     initAssistantFeature(interfac, context) {
         this.interface = interfac;
-        this.id = this.constructor.getCacheId(context.channelId, context.userId);
+        this.id = this.constructor.getCacheId(interfac, context.channelId, context.userId);
         this.context = context;
 
         this.resetTtl();

@@ -14,13 +14,6 @@ const limiter = new Bottleneck(1, 1000);
 
 class SlackService extends EventEmitter {
 
-    static getDataStore() {
-        if(!this.dataStore) {
-            this.dataStore = new MemoryDataStore();
-        }
-        return this.dataStore;
-    }
-
     constructor(options) {
         super();
         
@@ -32,6 +25,10 @@ class SlackService extends EventEmitter {
 
         this.init();
         this.slack.start();
+    }
+    
+    getDataStore() {
+        return this.slack.dataStore;
     }
 
     isAdministrator(userId) {
@@ -49,7 +46,7 @@ class SlackService extends EventEmitter {
 
         this.slack = new RtmClient(process.env.SLACK_TOKEN, {
             logLevel: 'warning',
-            dataStore: this.constructor.getDataStore()
+            dataStore: new MemoryDataStore()
         });
         this.slack.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
             this.authenticatedUserId = rtmStartData.self.id;
