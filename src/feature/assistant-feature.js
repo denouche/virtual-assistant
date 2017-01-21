@@ -1,11 +1,12 @@
-const _ = require('lodash');
+const _ = require('lodash'),
+    uuidV4 = require('uuid/v4');
 
 
 class AssistantFeature {
 
     static get scopes() {
         return {
-            GLOBAL: 'GLOBAL', // si lancé sur un channel, channel + tous les im   &&   si lancé sur un im, im
+            SHARED: 'SHARED', // si lancé sur un channel, channel + tous les im   &&   si lancé sur un im, im
             LOCAL: 'LOCAL', // si lancé sur un channel, channel   &&   si lancé sur un im, im
             // TODO 
             // PRIVATE_ONLY // seulement en IM
@@ -66,53 +67,6 @@ class AssistantFeature {
         return this.cache;
     }
 
-    static getCacheId(interfac, channelId, userId) {
-        // channel, group ou im
-        let datastore = interfac.getDataStore();
-        if(datastore.getChannelById(channelId)
-            || datastore.getGroupById(channelId)) {
-            // On est dans un channel/group
-            switch(this.getScope()) {
-                case AssistantFeature.scopes.GLOBAL:
-                    // Global + tous les ims
-                    return AssistantFeature.scopes.GLOBAL;
-                case AssistantFeature.scopes.LOCAL:
-                    // Local au channel/group en cours, on concatene le channelId pour la clé du cache
-                    return [this.getScope(), channelId].join('-');
-            }
-        }
-        else if(datastore.getDMById(channelId)) {
-            // on est dans un IM
-            switch(this.getScope()) {
-                case AssistantFeature.scopes.GLOBAL:
-                    // Global + tous les ims
-                    
-                    // Avant de retourner ici, on vérifie le channel courant de la feature
-                    let feat = AssistantFeature.getCache().get(AssistantFeature.scopes.GLOBAL);
-                    if(feat) {
-                        let channelFeat = feat.context.channelId;
-                        let channelOrGroup = datastore.getChannelById(channelFeat) || datastore.getGroupById(channelFeat);
-                        if(channelOrGroup && channelOrGroup.members.indexOf(userId) !== -1) {
-                            return AssistantFeature.scopes.GLOBAL;
-                        }
-                        // Si le user n'est pas dans ce channel/group, une éventuelle feature courante ne le concerne pas, même globale
-                        return null;
-                    }
-                    // Ici ça veut dire qu'on a pas de feature global en cours, on va donc la créer, mais en local seulement
-                    return [this.getScope(), channelId].join('-');
-                case AssistantFeature.scopes.LOCAL:
-                    // Local au channel/group en cours, on concatene le channelId pour la clé du cache
-                    return [this.getScope(), channelId].join('-');
-            }
-
-            return [this.getScope(), channelId].join('-');
-        }
-        // On ne devrait pas passer ici
-        console.warn('_getCacheId', channelId, userId, 'Not in channel, groups, or ims');
-        return null;
-    }
-
-
 
     constructor(interfac, context) {
 	    // context is : 
@@ -129,7 +83,7 @@ class AssistantFeature {
 
     initAssistantFeature(interfac, context) {
         this.interface = interfac;
-        this.id = this.constructor.getCacheId(interfac, context.channelId, context.userId);
+        this.id = uuidV4();
         this.context = context;
 
         this.resetTtl();

@@ -1,6 +1,7 @@
 'use strict';
 
 const RtmClient = require('@slack/client').RtmClient,
+    WebClient = require('@slack/client').WebClient,
     CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS,
     RTM_EVENTS = require('@slack/client').RTM_EVENTS,
     MemoryDataStore = require('@slack/client').MemoryDataStore,
@@ -21,10 +22,31 @@ class SlackService extends EventEmitter {
         this.administrators = options.administrators || [];
 
         this.slack = null; // RtmClient
+        this.slackWebClient = new WebClient(this.slackToken);
         this.authenticatedUserId = null; // Current bot id
 
         this.init();
         this.slack.start();
+    }
+
+    getDMIdByUserId(userId) {
+        // Have to hack this, because default "getDMByUserId" function does not open a new DM when DM does not exists
+        let that = this;
+        return new Promise(function(resolve, reject) {
+            if(that.getDataStore().getDMByUserId(userId)) {
+                resolve(that.getDataStore().getDMByUserId(userId).id);
+            }
+            else {
+                that.slackWebClient.im.open(userId, function(err, resp) {
+                    if(err) {
+                        reject(err);
+                    }
+                    else {
+                        resolve(resp.channel.id);
+                    }
+                });
+            }
+        });
     }
     
     getDataStore() {

@@ -5,6 +5,13 @@ const _ = require('lodash'),
 
 class VirtualAssistant {
 
+	static getUsersCache() {
+		if(!this.cache) {
+			this.cache = require('memory-cache');
+		}
+		return this.cache;
+	}
+
 	/**
 		options = {
 	        slack: { 
@@ -49,21 +56,31 @@ class VirtualAssistant {
 	    });
 	}
 
-	_getCurrentFeatureCacheId(interfac, context) {
-    	let cacheKey = null;
+	_getCurrentCacheIdForUser(userCacheId) {
+    	let cacheId = null;
 		_.forEach(this.featureList, (o) => {
-			if(!cacheKey) {
-    			let currentCacheId = o.getCacheId(interfac, context.channelId, context.userId);
-	    		if(currentCacheId && AssistantFeature.getCache().keys().indexOf(currentCacheId) !== -1) {
-	    			cacheKey = currentCacheId;
+			if(!cacheId) {
+	    		if(userCacheId && this.constructor.getUsersCache().keys().indexOf(userCacheId) !== -1) {
+	    			cacheId = this.constructor.getUsersCache().get(userCacheId);
 	    		}
 	    	}
 		});
-		return cacheKey || null;
+		return cacheId || null;
+	}
+
+	_getCurrentFeatureCacheId(userCacheId) {
+		let cacheId = this._getCurrentCacheIdForUser(userCacheId);
+		if(cacheId && AssistantFeature.getCache().keys().indexOf(cacheId) !== -1) {
+			return cacheId;
+		}
+		// User cache id point to unexistant feature cache id, remove it
+		this.constructor.getUsersCache().del(userCacheId);
+		return null;
 	}
 
 	_onMessage(fromInterface, context, message) {
-	    let featureCacheId = this._getCurrentFeatureCacheId(fromInterface, context);
+		let userCacheId = context.channelId;
+	    let featureCacheId = this._getCurrentFeatureCacheId(userCacheId);
 
 	    if(featureCacheId && AssistantFeature.getCache().get(featureCacheId)) {
 	        let feature = AssistantFeature.getCache().get(featureCacheId);
@@ -79,6 +96,8 @@ class VirtualAssistant {
 	            if(foundItems.length === 1) {
 	                let foundFeature = foundItems[0];
 	                let newFeature = new foundFeature(fromInterface, context);
+	                this.constructor.getUsersCache().put(userCacheId, newFeature.id); // link the user to the feature id
+	                
 	                let result = newFeature.preHandle(message, context);
 	                if(result) {
 	                	newFeature.handle(message, context);
