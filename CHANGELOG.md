@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/denouche/virtual-assistant/compare/v0.11.0...v0.12.0) (2017-01-21)
+
+
+### Features
+
+* rework feature cache management, add user cache to link users to running features, in order to be able to let the user choose to quit a feature ([06393d7](https://github.com/denouche/virtual-assistant/commit/06393d7))
+
+
+
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/denouche/virtual-assistant/compare/v0.10.0...v0.11.0) (2017-01-10)
 
