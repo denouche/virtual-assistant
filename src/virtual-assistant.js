@@ -1,5 +1,6 @@
 const _ = require('lodash'),
     SlackService = require('./interface/slack-service'),
+    DefaultInterface = require('./interface/default-interface'),
     AssistantFeature = require('./feature/assistant-feature'),
     Configuration = require('./feature/configuration/configuration');
 
@@ -24,6 +25,10 @@ class VirtualAssistant {
 	*/
 	constructor(featureList, options) {
 		this.featureList = _.concat(featureList, Configuration);
+		this.interfaces = {
+			def: new DefaultInterface()
+		};
+
 		this.slackService = null;
 		
 		if(options.slack) {
@@ -31,10 +36,30 @@ class VirtualAssistant {
 		}
 	}
 
+	ask(userId, text, channelId) {
+		return new Promise((resolve, reject) => {
+			let channel = channelId || userId,
+				def = new DefaultInterface(channel, userId);
+
+			def.on('response', (answeredChannelId, answeredUserId, response) => {
+				if(channel === answeredChannelId
+					&& userId === answeredUserId) {
+					resolve(response);
+				}
+			});
+
+			this._onMessage(def, {
+				userId: userId,
+				channelId: channel,
+				interfaceType: 'im'
+			}, text);
+		});
+	}
+
 	run() {
 		if(this.slackService) {
 			this.slackService.on('channel', (message, context) => {
-			    let regexpBot = new RegExp('<@' + this.slackService.getAuthenticatedUserId() + '>');
+			    let regexpBot = new RegExp(`(?:<@${this.slackService.getAuthenticatedUserId()}>\\s*|\\s*<@${this.slackService.getAuthenticatedUserId()}>|<@${this.slackService.getAuthenticatedUserId()}>)`);
 			    if(regexpBot.test(message)) {
 			        // Someone talk to the bot
 			        let messageToHandle = message.replace(regexpBot, '');
