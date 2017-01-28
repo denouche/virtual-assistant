@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient,
     ConfigurationService = require('../configuration-service');
 
-class StorageMongodbService {
+class DatabaseMongodbService {
 
 	constructor(collection) {
 		this.collection = collection;
@@ -118,4 +118,4 @@ class StorageMongodbService {
 
 }
 
-module.exports = StorageMongodbService;
+module.exports = DatabaseMongodbService;

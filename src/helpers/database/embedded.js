@@ -1,7 +1,8 @@
 const Datastore = require('nedb'),
-	ConfigurationService = require('../configuration-service');
+	ConfigurationService = require('../configuration-service'),
+	path = require('path');
 
-class StorageEmbeddedService {
+class DatabaseEmbeddedService {
 
 	constructor(collection) {
 		this.collection = collection;
@@ -156,4 +157,4 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
 
 }
 
-module.exports = StorageEmbeddedService;
+module.exports = DatabaseEmbeddedService;

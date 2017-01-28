@@ -1,6 +1,6 @@
 const ConfigurationService = require('./configuration-service');
 
-class StorageService {
+class DatabaseService {
 
     static _get(name) {
     	if(!this.db) {
@@ -28,9 +28,9 @@ class StorageService {
         if(!this.dbModule) {
             let dbModuleName = ConfigurationService.get('database.module');
             if(!dbModuleName) {
-                console.warn(`Warn: no database configuration found, an embedded database will be used.
-If you want to change it, set the configuration 'database.module' with the database module you want to use. For example to use mongodb, set it to './storage/mongodb'.`);
-                dbModuleName = './storage/embedded';
+                console.warn(`Warn: no database configuration found, an embedded database will be used (module './database/embedded').
+If you want to change it, set the configuration 'database.module' with the database module you want to use. For example to use mongodb, set it to './database/mongodb'.`);
+                dbModuleName = './database/embedded';
             }
             let dbModule = require(dbModuleName);
             this.dbModule = new dbModule(name);
@@ -76,4 +76,4 @@ If you want to change it, set the configuration 'database.module' with the datab
 
 }
 
-module.exports = StorageService;
+module.exports = DatabaseService;
