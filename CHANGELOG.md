@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.14.0"></a>
+# [0.14.0](https://github.com/denouche/virtual-assistant/compare/v0.13.0...v0.14.0) (2017-01-28)
+
+
+### Features
+
+* Storage service is now Database service. Fix missing import ([c3e6912](https://github.com/denouche/virtual-assistant/commit/c3e6912))
+
+
+
 <a name="0.13.0"></a>
 # [0.13.0](https://github.com/denouche/virtual-assistant/compare/v0.12.0...v0.13.0) (2017-01-28)
 
