@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/denouche/virtual-assistant/compare/v0.12.0...v0.13.0) (2017-01-28)
+
+
+### Features
+
+* **storage:** add storage service, with mongodb and embedded database support ([352106f](https://github.com/denouche/virtual-assistant/commit/352106f))
+
+
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/denouche/virtual-assistant/compare/v0.11.0...v0.12.0) (2017-01-21)
 
