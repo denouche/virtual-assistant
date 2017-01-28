@@ -1,6 +1,6 @@
 {
   "name": "virtual-assistant",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "main": "index.js",
   "description": "An extensible chat bot that can help you in a lot of tasks",
   "dependencies": {
