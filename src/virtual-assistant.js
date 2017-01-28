@@ -100,8 +100,7 @@ class VirtualAssistant {
 	                	.insertOne({
 	                		date: new Date(),
 	                		feature: foundFeature.name,
-	                		channelId: context.channelId,
-	                		userId: context.userId
+	                		context: context
 	                	});
 
 	                let newFeature = new foundFeature(fromInterface, context);

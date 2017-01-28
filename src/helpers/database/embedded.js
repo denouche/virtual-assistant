@@ -8,7 +8,7 @@ class EmbeddedDAO extends AbstractDAO {
     static _getCollection(name) {
         if(!this.dbBasepath) {
             this.dbBasepath = ConfigurationService.get('database.embedded.basepath');
-            if(!dbBasepath) {
+            if(!this.dbBasepath) {
             	this.dbBasepath = 'database';
 	            console.warn(`Warn: missing base path folder for embedded database files. The default value './database/' will be used.
 If you want to change it, set the configuration 'database.embedded.basepath' with the base path folder where to store the database files.`);
