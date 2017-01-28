@@ -1,6 +1,6 @@
 const AssistantFeature = require('../assistant-feature'),
     StateMachine = require('javascript-state-machine'),
-    ConfigurationService = require('../../helpers/configuration-service.js');
+    ConfigurationService = require('../../helpers/configuration-service');
 
 class Configuration extends AssistantFeature {
 

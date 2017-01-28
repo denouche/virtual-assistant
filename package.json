@@ -10,6 +10,8 @@
     "javascript-state-machine": "^2.3.5",
     "lodash": "^4.17.3",
     "memory-cache": "^0.1.6",
+    "mongodb": "^2.2.22",
+    "nedb": "^1.8.0",
     "object-path": "^0.11.2"
   },
   "devDependencies": {
