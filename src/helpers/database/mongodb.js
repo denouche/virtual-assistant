@@ -1,13 +1,10 @@
-const MongoClient = require('mongodb').MongoClient,
+const AbstractDAO = require('./abstract-dao'),
+    MongoClient = require('mongodb').MongoClient,
     ConfigurationService = require('../configuration-service');
 
-class DatabaseMongodbService {
+class MongodbDAO extends AbstractDAO {
 
-	constructor(collection) {
-		this.collection = collection;
-	}
-
-    static _get(name) {
+    static _getCollection(name) {
         if(!this.dbUrl) {
             this.dbUrl = ConfigurationService.get('database.mongodb.url');
             if(!this.dbUrl) {
@@ -34,7 +31,7 @@ class DatabaseMongodbService {
 
     insertOne(doc) {
     	var args = arguments;
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(collection) {
     			return collection.insertOne.apply(collection, args);
     		});
@@ -42,7 +39,7 @@ class DatabaseMongodbService {
 
     insertMany(docs) {
     	var args = arguments;
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(collection) {
     			return collection.insertMany.apply(collection, args);
     		});
@@ -50,7 +47,7 @@ class DatabaseMongodbService {
 
     find(query) {
     	var args = arguments;
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(collection) {
     			return collection.find.apply(collection, args);
     		})
@@ -70,7 +67,7 @@ class DatabaseMongodbService {
 
     findOne(query) {
     	var args = arguments;
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(collection) {
     			return collection.findOne.apply(collection, args);
     		});
@@ -78,7 +75,7 @@ class DatabaseMongodbService {
 
     count(query) {
     	var args = arguments;
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(collection) {
     			return collection.count.apply(collection, args);
     		});
@@ -86,7 +83,7 @@ class DatabaseMongodbService {
 
     updateOne(query, update, options) {
     	var args = arguments;
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(collection) {
     			return collection.updateOne.apply(collection, args);
     		});
@@ -94,7 +91,7 @@ class DatabaseMongodbService {
 
     updateMany(query, update, options) {
     	var args = arguments;
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(collection) {
     			return collection.updateMany.apply(collection, args);
     		});
@@ -102,7 +99,7 @@ class DatabaseMongodbService {
 
     deleteOne(query, options) {
     	var args = arguments;
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(collection) {
     			return collection.deleteOne.apply(collection, args);
     		});
@@ -110,7 +107,7 @@ class DatabaseMongodbService {
 
     deleteMany(query, options) {
     	var args = arguments;
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(collection) {
     			return collection.deleteMany.apply(collection, args);
     		});
@@ -118,4 +115,4 @@ class DatabaseMongodbService {
 
 }
 
-module.exports = DatabaseMongodbService;
+module.exports = MongodbDAO;

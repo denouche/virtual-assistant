@@ -96,7 +96,14 @@ class VirtualAssistant {
 	        if(foundItems && foundItems.length > 0) {
 	            if(foundItems.length === 1) {
 	                let foundFeature = foundItems[0];
-	                //Database.collection('statistics').insertOne({date: new Date().toISOString(), feature: foundFeature.name});
+	                Database.collection('statistics_launched_features')
+	                	.insertOne({
+	                		date: new Date(),
+	                		feature: foundFeature.name,
+	                		channelId: context.channelId,
+	                		userId: context.userId
+	                	});
+
 	                let newFeature = new foundFeature(fromInterface, context);
 	                this.constructor.getUsersCache().put(userCacheId, newFeature.id); // link the user to the feature id
 	                

@@ -1,14 +1,11 @@
-const Datastore = require('nedb'),
+const AbstractDAO = require('./abstract-dao'),
+	Datastore = require('nedb'),
 	ConfigurationService = require('../configuration-service'),
 	path = require('path');
 
-class DatabaseEmbeddedService {
+class EmbeddedDAO extends AbstractDAO {
 
-	constructor(collection) {
-		this.collection = collection;
-	}
-
-    static _get(name) {
+    static _getCollection(name) {
         if(!this.dbBasepath) {
             this.dbBasepath = ConfigurationService.get('database.embedded.basepath') || 'database';
             console.warn(`Warn: missing base path folder for embedded database files. The default value './database/' will be used.
@@ -18,13 +15,17 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
     		this.db = {};
     	}
     	if(!this.db[name]) {
-    		this.db[name] = new Datastore({ filename: path.join(this.dbBasepath, (name || 'database') + '.db'), autoload: true });
+    		this.db[name] = new Datastore({ filename: path.join(this.dbBasepath, (name || 'database') + '.db') });
     	}
-        return Promise.resolve(this.db[name]);
+        return new Promise((resolve, reject) => {
+        	this.db[name].loadDatabase((err) => {
+        		resolve(this.db[name])
+			});
+        });
     }
 
     insertOne(doc) {
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(db) {
     			return new Promise((resolve, reject) => {
 	    			db.insert(doc, function (err, newDoc) {
@@ -44,7 +45,7 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
     }
 
     find(query) {
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(db) {
     			return new Promise((resolve, reject) => {
 	    			db.find(query, function (err, docs) {
@@ -60,7 +61,7 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
     }
 
     findOne(query) {
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(db) {
     			return new Promise((resolve, reject) => {
 	    			db.findOne(query, function (err, doc) {
@@ -76,7 +77,7 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
     }
 
     count(query) {
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(db) {
     			return new Promise((resolve, reject) => {
 	    			db.count(query, function (err, count) {
@@ -92,7 +93,7 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
     }
 
     updateOne(query, update) {
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(db) {
     			return new Promise((resolve, reject) => {
 	    			db.update(query, update, { multi: false }, function (err, numAffected) {
@@ -108,7 +109,7 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
     }
 
     updateMany(query, update) {
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(db) {
     			return new Promise((resolve, reject) => {
 	    			db.update(query, update, { multi: true }, function (err, numAffected) {
@@ -124,7 +125,7 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
     }
 
     deleteOne(query) {
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(db) {
     			return new Promise((resolve, reject) => {
 	    			db.remove(query, { multi: false }, function (err, numRemoved) {
@@ -140,7 +141,7 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
     }
 
     deleteMany(query) {
-    	return this.constructor._get(this.collection)
+    	return this.constructor._getCollection(this.collection)
     		.then(function(db) {
     			return new Promise((resolve, reject) => {
 	    			db.remove(query, { multi: true }, function (err, numRemoved) {
@@ -157,4 +158,4 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
 
 }
 
-module.exports = DatabaseEmbeddedService;
+module.exports = EmbeddedDAO;

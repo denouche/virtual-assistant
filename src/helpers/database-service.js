@@ -2,24 +2,6 @@ const ConfigurationService = require('./configuration-service');
 
 class DatabaseService {
 
-    static _get(name) {
-    	if(!this.db) {
-    		this.db = new Promise((resolve, reject) => {
-	    		MongoClient.connect(url, function(err, db) {
-	    			if(err) {
-	    				reject(err)
-	    			}
-	    			else {
-		    			resolve(db);
-		    		}
-	    		});
-    		});
-    	}
-		return this.db.then(function(db) {
-			return db.collection(name);
-		});
-    }
-
     static collection(name) {
     	if(/\W/.test(name)) {
     		console.error('Error: only use word characters in collection name');
