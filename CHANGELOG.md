@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.15.1"></a>
+## [0.15.1](https://github.com/denouche/virtual-assistant/compare/v0.15.0...v0.15.1) (2017-01-28)
+
+
+### Bug Fixes
+
+* do not display warning for missing embedded database configuration if the configuration is present ([ca00841](https://github.com/denouche/virtual-assistant/commit/ca00841))
+
+
+
 <a name="0.15.0"></a>
 # [0.15.0](https://github.com/denouche/virtual-assistant/compare/v0.14.0...v0.15.0) (2017-01-28)
 
