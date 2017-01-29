@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.16.0"></a>
+# [0.16.0](https://github.com/denouche/virtual-assistant/compare/v0.15.3...v0.16.0) (2017-01-29)
+
+
+### Bug Fixes
+
+* the same collection was used for each collection names ([0600f95](https://github.com/denouche/virtual-assistant/commit/0600f95))
+
+
+### Features
+
+* add statistics service to be able to save events triggers ([6688619](https://github.com/denouche/virtual-assistant/commit/6688619))
+
+
+
 <a name="0.15.3"></a>
 ## [0.15.3](https://github.com/denouche/virtual-assistant/compare/v0.15.2...v0.15.3) (2017-01-29)
 
