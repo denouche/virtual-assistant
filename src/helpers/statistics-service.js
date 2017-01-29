@@ -35,8 +35,8 @@ class StatisticsService {
             debug('Error: No event found for name [%s], you have to register it first calling register function', eventName);
             return;
         }
-        let toSave = _.merge(event, {date: new Date()});
-        Database.collection(`statistics_${eventName.toLowerCase()}`).insertOne(toSave);
+        let toSave = _.merge(event, {event: eventName.toLowerCase(), date: new Date()});
+        Database.collection('statistics').insertOne(toSave);
     }
 
 }
