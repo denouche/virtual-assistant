@@ -4,6 +4,7 @@ const _ = require('lodash'),
     AssistantFeature = require('./feature/assistant-feature'),
     Configuration = require('./feature/configuration/configuration'),
     Database = require('./helpers/database-service'),
+    Statistics = require('./helpers/statistics-service'),
     Features = require('./helpers/features-service');
 
 class VirtualAssistant {
@@ -99,12 +100,12 @@ class VirtualAssistant {
             if(foundItems && foundItems.length > 0) {
                 if(foundItems.length === 1) {
                     let foundFeature = foundItems[0];
-                    Database.collection('statistics_launched_features')
-                        .insertOne({
-                            date: new Date(),
-                            feature: foundFeature.name,
-                            context: context
-                        });
+                    Statistics.event(Statistics.events.FEATURE_LAUNCH, {
+                        feature: foundFeature.name,
+                        userId: context.userId,
+                        channelId: context.channelId,
+                        interfaceType: context.interfaceType
+                    });
 
                     let newFeature = new foundFeature(fromInterface, context);
                     this.constructor.getUsersCache().put(userCacheId, newFeature.id); // link the user to the feature id

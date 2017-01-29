@@ -1,9 +1,18 @@
 const _ = require('lodash'),
-    debug = require('debug')('virtual-assistant:assistant-feature'),
+    Debug = require('debug'),
     uuidV4 = require('uuid/v4');
 
+let debug = Debug('virtual-assistant:assistant-feature');
 
 class AssistantFeature {
+
+    /**
+    * Use this function to initialize the feature, for example to register events in StatisticsService.
+    */
+    static init() {
+        debug = Debug(`virtual-assistant:assistant-feature:${this.name}`)
+        debug('init');
+    }
 
     static get scopes() {
         return {

@@ -4,7 +4,7 @@ const _ = require('lodash'),
 class FeaturesService {
 
     constructor() {
-        this._featuresList = [];
+        this._list = [];
     }
 
     static getInstance() {
@@ -15,11 +15,11 @@ class FeaturesService {
     }
 
     get list() {
-        return this._featuresList;
+        return this._list;
     }
 
     set list(list) {
-        this._featuresList = list;
+        this._list = list;
     }
 
     add() {
@@ -29,7 +29,10 @@ class FeaturesService {
             if(!_.isArray(e)) {
                 toAdd = [e];
             }
-            this._featuresList = _.concat(this._featuresList, toAdd);
+            _.forEach(toAdd, function(feat) {
+                feat.init();
+            });
+            this._list = _.concat(this._list, toAdd);
         });
     }
 
