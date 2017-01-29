@@ -1,23 +1,24 @@
-const ConfigurationService = require('./configuration-service');
+const ConfigurationService = require('./configuration-service'),
+    debug = require('debug')('virtual-assistant:database-service');
 
 class DatabaseService {
 
     static collection(name) {
-    	if(/\W/.test(name)) {
-    		console.error('Error: only use word characters in collection name');
-    		return null;
-    	}
+        if(/\W/.test(name)) {
+            debug('Error: only use word characters in collection name');
+            return null;
+        }
         if(!this.dbModule) {
             let dbModuleName = ConfigurationService.get('database.module');
             if(!dbModuleName) {
-                console.warn(`Warn: no database configuration found, an embedded database will be used (module './database/embedded').
+                debug(`Warn: no database configuration found, an embedded database will be used (module './database/embedded').
 If you want to change it, set the configuration 'database.module' with the database module you want to use. For example to use mongodb, set it to './database/mongodb'.`);
                 dbModuleName = './database/embedded';
             }
             let dbModule = require(dbModuleName);
             this.dbModule = new dbModule(name);
         }
-    	return this.dbModule;
+        return this.dbModule;
     }
 
     insertOne(doc) {

@@ -1,7 +1,8 @@
 const AbstractDAO = require('./abstract-dao'),
 	Datastore = require('nedb'),
 	ConfigurationService = require('../configuration-service'),
-	path = require('path');
+	path = require('path'),
+	debug = require('debug')('virtual-assistant:database-embedded');
 
 class EmbeddedDAO extends AbstractDAO {
 
@@ -10,7 +11,7 @@ class EmbeddedDAO extends AbstractDAO {
             this.dbBasepath = ConfigurationService.get('database.embedded.basepath');
             if(!this.dbBasepath) {
             	this.dbBasepath = 'database';
-	            console.warn(`Warn: missing base path folder for embedded database files. The default value './database/' will be used.
+	            debug(`Warn: missing base path folder for embedded database files. The default value './database/' will be used.
 If you want to change it, set the configuration 'database.embedded.basepath' with the base path folder where to store the database files.`);
             }
         }

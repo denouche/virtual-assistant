@@ -7,6 +7,7 @@ const RtmClient = require('@slack/client').RtmClient,
     MemoryDataStore = require('@slack/client').MemoryDataStore,
     Bottleneck = require('bottleneck'),
     _ = require('lodash'),
+    debug = require('debug')('virtual-assistant:slack-service'),
     entities = require('entities'),
     EventEmitter = require('events').EventEmitter;
 
@@ -31,13 +32,12 @@ class SlackService extends EventEmitter {
 
     getDMIdByUserId(userId) {
         // Have to hack this, because default "getDMByUserId" function does not open a new DM when DM does not exists
-        let that = this;
-        return new Promise(function(resolve, reject) {
-            if(that.getDataStore().getDMByUserId(userId)) {
-                resolve(that.getDataStore().getDMByUserId(userId).id);
+        return new Promise((resolve, reject) => {
+            if(this.getDataStore().getDMByUserId(userId)) {
+                resolve(this.getDataStore().getDMByUserId(userId).id);
             }
             else {
-                that.slackWebClient.im.open(userId, function(err, resp) {
+                this.slackWebClient.im.open(userId, function(err, resp) {
                     if(err) {
                         reject(err);
                     }
@@ -83,17 +83,17 @@ class SlackService extends EventEmitter {
                 .filter((g) => { return g.is_open && !g.is_archived; })
                 .map((g) => { return g.name; });
          
-            console.info('Welcome to Slack. You are ' + rtmStartData.self.name + ' of ' + rtmStartData.team.name);
+            debug('Welcome to Slack. You are ' + rtmStartData.self.name + ' of ' + rtmStartData.team.name);
          
             if (channels.length > 0) {
-                console.info('You are in: ' + channels.join(', '));
+                debug('You are in: ' + channels.join(', '));
             }
             else {
-                console.info('You are not in any channels.');
+                debug('You are not in any channels.');
             }
          
             if (groups.length > 0) {
-               console.info('As well as: ' + groups.join(', '));
+               debug('As well as: ' + groups.join(', '));
             }
         });
 
@@ -136,7 +136,6 @@ class SlackService extends EventEmitter {
         });
     }
 
-
     send(channelId, message) {
         if(this.slack && channelId) {
             limiter.submit((toSend, done) => {
@@ -145,7 +144,17 @@ class SlackService extends EventEmitter {
             }, message, () => { /* done function, callback needed */ });
         }
     }
-
+/*
+    sendAttachments(channelId, attachments, message) {
+        if(this.slack && channelId) {
+            limiter.submit((toSend, done) => {
+                this.slackWebClient.chat.postMessage(channelId, message || "", { as_user: true, attachments: attachments }, function(err, resp) {
+                    done();
+                });
+            }, message, () => { /* done function, callback needed */ /*});
+        }
+    }
+*/
 }
 
 

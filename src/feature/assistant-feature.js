@@ -1,4 +1,5 @@
 const _ = require('lodash'),
+    debug = require('debug')('virtual-assistant:assistant-feature'),
     uuidV4 = require('uuid/v4');
 
 
@@ -29,10 +30,10 @@ class AssistantFeature {
     /**
     *   Override to add your own trigger keywords
     */
-	static getTriggerKeywords() {
+    static getTriggerKeywords() {
         // Array of string that will trigger the feature to start
-		throw new TypeError("Not implemented, please implement this function in sub class");
-	}
+        throw new TypeError("Not implemented, please implement this function in sub class");
+    }
 
     /**
     *   Override to add the description of the feature this class provide
@@ -46,13 +47,13 @@ class AssistantFeature {
     /**
     *   Override if needed
     */
-	static getTTL() {
+    static getTTL() {
         // Optionnal, default value is 0
         // In seconds
         // Setting this to > 0 will keep the feature state for the given duration
         // Set to 0 to disable the persistence of this feature
         return 0;
-	}
+    }
     
     static canHandle(message) {
         return _.some(this.getTriggerKeywords(), function(keyword) {
@@ -69,15 +70,15 @@ class AssistantFeature {
 
 
     constructor(interfac, context) {
-	    // context is : 
-	    // { 
-	    //  userId: xxx, // the user who launched the feature
+        // context is : 
+        // { 
+        //  userId: xxx, // the user who launched the feature
         //  channelId: xxx, // the channel where the feature was launched
         //  interfaceType: im|channel // The interface type where the feature was initialy launched
-	    //  model: {
+        //  model: {
         //      // put your feature model here, this will be persisted
-	    //  }
-	    // }
+        //  }
+        // }
         this.initAssistantFeature(interfac, context);
     }
 
@@ -95,12 +96,12 @@ class AssistantFeature {
 
     onenterstate(event, from, to) {
         // generic function for every states
-        console.log('enter state event=' + event + ', from=' + from + ', to=' + to);
+        debug('enter state event=' + event + ', from=' + from + ', to=' + to);
     }
 
     onbeforeevent(event, from, to) {
         // generic function for every events
-        console.log('event event=' + event + ', from=' + from + ', to=' + to);
+        debug('event event=' + event + ', from=' + from + ', to=' + to);
     }
 
 
@@ -113,6 +114,12 @@ class AssistantFeature {
             toSend = message;
         }
         this.interface.send(channelId || this.context.channelId, toSend);
+        /*this.interface.sendAttachments(channelId || this.context.channelId, [
+            {
+                title: "titre",
+                image_url: "http://media.androidappsgame.com/4/13897/the-test-fun-for-friends-13897.jpg"
+            }
+        ]);*/
     }
 
     clearCache() {
@@ -140,7 +147,7 @@ class AssistantFeature {
     handle(message, context) {
         /*
         // TODO lister les transitions possibles
-        console.log(this.transitions());
+        debug(this.transitions());
         this.send("Je n'ai pas compris votre réponse");
         if(this.transitions().indexOf('yes') != -1 
             && this.transitions().indexOf('no') != -1) {
@@ -149,7 +156,7 @@ class AssistantFeature {
         return false;*/
     }
 
-	
+    
 }
 
 module.exports = AssistantFeature;

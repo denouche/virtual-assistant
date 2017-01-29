@@ -1,4 +1,5 @@
-const AssistantFeature = require('../assistant-feature'),
+const debug = require('debug')('virtual-assistant:feature:configuration'),
+    AssistantFeature = require('../assistant-feature'),
     StateMachine = require('javascript-state-machine'),
     ConfigurationService = require('../../helpers/configuration-service');
 
@@ -25,8 +26,8 @@ class Configuration extends AssistantFeature {
         StateMachine.create({
             target: Configuration.prototype,
             error: function(eventName, from, to, args, errorCode, errorMessage) {
-                console.error('Uncatched error',  'event ' + eventName + ' was naughty :- ' + errorMessage)
-                console.error(args)
+                debug('Uncatched error',  'event ' + eventName + ' was naughty :- ' + errorMessage)
+                debug(args)
             },
             initial: { state: 'Help', event: 'startup', defer: true }, // defer is important since the startup event is launched after the feature is stored in cache
             terminal: 'End',
@@ -124,7 +125,7 @@ class Configuration extends AssistantFeature {
         }
         }
         catch(e) {
-            console.error('Error on configuration Text state', e);
+            debug('Error on configuration Text state', e);
         }
         this.wait();
     }

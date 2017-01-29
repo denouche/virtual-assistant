@@ -1,6 +1,7 @@
 const AbstractDAO = require('./abstract-dao'),
     MongoClient = require('mongodb').MongoClient,
-    ConfigurationService = require('../configuration-service');
+    ConfigurationService = require('../configuration-service'),
+    debug = require('debug')('virtual-assistant:database-mongodb');
 
 class MongodbDAO extends AbstractDAO {
 
@@ -8,7 +9,7 @@ class MongodbDAO extends AbstractDAO {
         if(!this.dbUrl) {
             this.dbUrl = ConfigurationService.get('database.mongodb.url');
             if(!this.dbUrl) {
-                console.error('Error: missing mongodb configuration URL. Please set the configuration `database.mongodb.url` with the database url (eg: `mongodb://localhost:27017/myproject`)');
+                debug('Error: missing mongodb configuration URL. Please set the configuration `database.mongodb.url` with the database url (eg: `mongodb://localhost:27017/myproject`)');
                 return null;
             }
         }
