@@ -7,6 +7,7 @@ const AbstractDAO = require('./abstract-dao'),
 class EmbeddedDAO extends AbstractDAO {
 
     static _getCollection(name) {
+    	debug('_getCollection', name);
         if(!this.dbBasepath) {
             this.dbBasepath = ConfigurationService.get('database.embedded.basepath');
             if(!this.dbBasepath) {
@@ -16,9 +17,11 @@ If you want to change it, set the configuration 'database.embedded.basepath' wit
             }
         }
     	if(!this.db) {
+    		debug('_getCollection', 'init db');
     		this.db = {};
     	}
     	if(!this.db[name]) {
+    		debug('_getCollection', 'init db in file', name, path.join(this.dbBasepath, (name || 'database') + '.db'));
     		this.db[name] = new Datastore({ filename: path.join(this.dbBasepath, (name || 'database') + '.db') });
     	}
         return new Promise((resolve, reject) => {
