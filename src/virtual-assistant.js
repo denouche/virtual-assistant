@@ -99,15 +99,17 @@ class VirtualAssistant {
             debug('foundItems', foundItems);
             if(foundItems && foundItems.length > 0) {
                 if(foundItems.length === 1) {
-                    let foundFeature = foundItems[0];
+                    let foundFeature = foundItems[0],
+                        newFeature = new foundFeature(fromInterface, context);
+
                     Statistics.event(Statistics.events.FEATURE_LAUNCH, {
+                        featureId: newFeature.id,
                         feature: foundFeature.name,
                         userId: context.userId,
                         channelId: context.channelId,
                         interfaceType: context.interfaceType
                     });
 
-                    let newFeature = new foundFeature(fromInterface, context);
                     this.constructor.getUsersCache().put(userCacheId, newFeature.id); // link the user to the feature id
                     
                     let result = newFeature.preHandle(message, context);
