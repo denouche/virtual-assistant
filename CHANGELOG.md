@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.16.4"></a>
+## [0.16.4](https://github.com/denouche/virtual-assistant/compare/v0.16.3...v0.16.4) (2017-01-31)
+
+
+### Bug Fixes
+
+* do not crash on unknown database module ([8791107](https://github.com/denouche/virtual-assistant/commit/8791107))
+
+
+
 <a name="0.16.3"></a>
 ## [0.16.3](https://github.com/denouche/virtual-assistant/compare/v0.16.2...v0.16.3) (2017-01-30)
 
