@@ -21,7 +21,14 @@ If you want to change it, set the configuration 'database.module' with the datab
             this.dbModule = {};
         }
         if(!this.dbModule[name]) {
-            let dbModule = require(this.dbModuleName);
+            let dbModule;
+            try {
+                dbModule = require(this.dbModuleName);
+            } catch(e) {
+                debug(`Error: database module ${this.dbModuleName} not found, using default embedded database module instead.`)
+                this.dbModuleName = './database/embedded';
+                dbModule = require(this.dbModuleName);
+            }
             this.dbModule[name] = new dbModule(name);
         }
         return this.dbModule[name];
