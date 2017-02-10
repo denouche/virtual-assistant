@@ -36,7 +36,7 @@ class StatisticsService {
             return;
         }
         let toSave = {eventName: eventName.toLowerCase(), date: new Date(), event: event};
-        Database.collection('statistics').insertOne(toSave);
+        Database.collection('statistics').create(toSave);
     }
 
 }

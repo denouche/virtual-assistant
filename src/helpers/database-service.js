@@ -1,6 +1,7 @@
 const ConfigurationService = require('./configuration-service'),
     debug = require('debug')('virtual-assistant:database-service');
 
+
 class DatabaseService {
 
     static collection(name) {
@@ -12,26 +13,36 @@ class DatabaseService {
         if(!this.dbModuleName) {
             this.dbModuleName = ConfigurationService.get('database.module');
             if(!this.dbModuleName) {
-                debug(`Warn: no database configuration found, an embedded database will be used (module './database/embedded').
-If you want to change it, set the configuration 'database.module' with the database module you want to use. For example to use mongodb, set it to './database/mongodb'.`);
-                this.dbModuleName = './database/embedded';
+                debug(`Warn: no database configuration found.
+If you want to set it, set the configuration 'database.module' with the database module you want to use. For example to use mongodb, set it to './database/mongodb'.`);
+                this.dbModuleName = './database/mock';
             }
         }
-        if(!this.dbModule) {
-            this.dbModule = {};
+
+        let dbContainer;
+        try {
+            let dbModule = require(this.dbModuleName);
+            dbContainer = dbModule.getContainer(name)
+        } catch(e) {
+            debug(`Error: database module ${this.dbModuleName} not found`, e);
+            // Let's retry with mock
+            this.dbModuleName = './database/mock';
+            let dbModule = require(this.dbModuleName);
+            dbContainer = dbModule.getContainer(name)
         }
-        if(!this.dbModule[name]) {
-            let dbModule;
-            try {
-                dbModule = require(this.dbModuleName);
-            } catch(e) {
-                debug(`Error: database module ${this.dbModuleName} not found, using default embedded database module instead.`)
-                this.dbModuleName = './database/embedded';
-                dbModule = require(this.dbModuleName);
+
+        if(dbContainer) {
+            let mapper = dbContainer.getMapperByName(name);
+            if(!mapper) {
+                mapper = dbContainer.defineMapper(name, {
+                  table: name
+                });
             }
-            this.dbModule[name] = new dbModule(name);
+            return mapper;
         }
-        return this.dbModule[name];
+        
+        // Should never happens because by default the mock module is loaded
+        return null;
     }
 
 }
