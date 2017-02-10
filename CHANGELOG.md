@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.17.0"></a>
+# [0.17.0](https://github.com/denouche/virtual-assistant/compare/v0.16.4...v0.17.0) (2017-02-10)
+
+
+### Bug Fixes
+
+* **configuration:** now accept value with spaces ([453ca74](https://github.com/denouche/virtual-assistant/commit/453ca74))
+
+
+### Features
+
+* **database:** change all the persistence to use js-data, add Google Datastore adapter and MongoDB adapter ([4e7fc63](https://github.com/denouche/virtual-assistant/commit/4e7fc63))
+
+
+
 <a name="0.16.4"></a>
 ## [0.16.4](https://github.com/denouche/virtual-assistant/compare/v0.16.3...v0.16.4) (2017-01-31)
 
