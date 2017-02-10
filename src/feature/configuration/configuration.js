@@ -96,7 +96,7 @@ class Configuration extends AssistantFeature {
 
     onText(event, from, to, text) {
         var getRegexp = /^get(?:\s+(.*))?$/,
-            setRegexp = /^set\s+([^\s]+)\s([^\s]+)$/,
+            setRegexp = /^set\s+([^\s]+)\s(.+)$/,
             deleteRegexp = /^delete\s+([^\s]+)$/,
             matcher;
         try {
