@@ -10,6 +10,9 @@ class DatabaseService {
             debug('Error: only use word characters in collection name');
             return null;
         }
+        if(!this.dbPrefix) {
+            this.dbPrefix = ConfigurationService.get('database.prefix');
+        }
         if(!this.dbModuleName) {
             this.dbModuleName = ConfigurationService.get('database.module');
             if(!this.dbModuleName) {
@@ -22,20 +25,20 @@ If you want to set it, set the configuration 'database.module' with the database
         let dbContainer;
         try {
             let dbModule = require(this.dbModuleName);
-            dbContainer = dbModule.getContainer(name)
+            dbContainer = dbModule.getContainer((this.dbPrefix || '') + name)
         } catch(e) {
             debug(`Error: database module ${this.dbModuleName} not found`, e);
             // Let's retry with mock
             this.dbModuleName = './database/mock';
             let dbModule = require(this.dbModuleName);
-            dbContainer = dbModule.getContainer(name)
+            dbContainer = dbModule.getContainer((this.dbPrefix || '') + name)
         }
 
         if(dbContainer) {
-            let mapper = dbContainer.getMapperByName(name);
+            let mapper = dbContainer.getMapperByName((this.dbPrefix || '') + name);
             if(!mapper) {
-                mapper = dbContainer.defineMapper(name, {
-                  table: name
+                mapper = dbContainer.defineMapper((this.dbPrefix || '') + name, {
+                  table: (this.dbPrefix || '') + name
                 });
             }
             return mapper;

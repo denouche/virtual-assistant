@@ -9,6 +9,10 @@ This library offer Javascript classes and services that will help you and guide 
 For now the chatbot support Slack and this can be extended to other plateforms, feel free to contribute.
 
 
+## Run my own chatbot
+
+TODO, also add available configurations
+
 ## Develop my own feature-plugin
 
 Just create a new project, create a new npm module and install this library as npm dependency:
