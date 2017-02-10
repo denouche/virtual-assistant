@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.18.0"></a>
+# [0.18.0](https://github.com/denouche/virtual-assistant/compare/v0.17.0...v0.18.0) (2017-02-10)
+
+
+### Features
+
+* **database:** allow to·add database prefix table ([d1f9f2a](https://github.com/denouche/virtual-assistant/commit/d1f9f2a))
+
+
+
 <a name="0.17.0"></a>
 # [0.17.0](https://github.com/denouche/virtual-assistant/compare/v0.16.4...v0.17.0) (2017-02-10)
 
