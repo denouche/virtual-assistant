@@ -13,9 +13,14 @@
     "js-data-adapter": "^0.8.3",
     "js-data-cloud-datastore": "^1.0.0-rc.1",
     "js-data-mongodb": "^0.7.0",
+    "js-data-sql": "git://github.com/js-data/js-data-sql.git#v3",
+    "knex": "^0.12.6",
     "lodash": "^4.17.3",
     "memory-cache": "^0.1.6",
-    "object-path": "^0.11.2"
+    "mysql": "^2.13.0",
+    "object-path": "^0.11.2",
+    "pg": "^6.1.2",
+    "sqlite3": "^3.1.8"
   },
   "devDependencies": {
     "standard-version": "^4.0.0"
