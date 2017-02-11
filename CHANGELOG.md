@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.19.0"></a>
+# [0.19.0](https://github.com/denouche/virtual-assistant/compare/v0.18.0...v0.19.0) (2017-02-11)
+
+
+### Features
+
+* **database:** add SQL support for persistence. Based on js-data (which internally uses Knex) ([625bb08](https://github.com/denouche/virtual-assistant/commit/625bb08))
+
+
+
 <a name="0.18.0"></a>
 # [0.18.0](https://github.com/denouche/virtual-assistant/compare/v0.17.0...v0.18.0) (2017-02-10)
 
