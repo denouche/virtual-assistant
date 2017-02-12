@@ -2,7 +2,13 @@ const Adapter = require('js-data-adapter').Adapter,
     Container = require('js-data').Container;
 
 
-class MyAdapter extends Adapter {}
+class MyAdapter extends Adapter {
+
+	_create() {
+		return Promise.resolve([]);
+	}
+
+}
 
 class MockDao {
 
