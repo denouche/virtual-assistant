@@ -2,16 +2,20 @@ const _ = require('lodash'),
     Debug = require('debug'),
     uuidV4 = require('uuid/v4');
 
-let debug = Debug('virtual-assistant:assistant-feature');
-
 class AssistantFeature {
+
+    static debug() {
+        if(!this._logger) {
+            this._logger = Debug(`virtual-assistant:assistant-feature:${this.name}`);
+        }
+        this._logger.apply(this, arguments);
+    }
 
     /**
     * Use this function to initialize the feature, for example to register events in StatisticsService.
     */
     static init() {
-        debug = Debug(`virtual-assistant:assistant-feature:${this.name}`)
-        debug('init');
+        this.debug('init');
     }
 
     static get scopes() {
@@ -91,6 +95,10 @@ class AssistantFeature {
         this.initAssistantFeature(interfac, context);
     }
 
+    debug() {
+        this.constructor.debug.apply(this.constructor, arguments);
+    }
+
     initAssistantFeature(interfac, context) {
         this.interface = interfac;
         this.id = uuidV4();
@@ -105,12 +113,12 @@ class AssistantFeature {
 
     onenterstate(event, from, to) {
         // generic function for every states
-        debug('enter state event=' + event + ', from=' + from + ', to=' + to);
+        this.debug('enter state event=' + event + ', from=' + from + ', to=' + to);
     }
 
     onbeforeevent(event, from, to) {
         // generic function for every events
-        debug('event event=' + event + ', from=' + from + ', to=' + to);
+        this.debug('event event=' + event + ', from=' + from + ', to=' + to);
     }
 
 
