@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.19.1"></a>
+## [0.19.1](https://github.com/denouche/virtual-assistant/compare/v0.19.0...v0.19.1) (2017-02-12)
+
+
+### Bug Fixes
+
+* logger was misnamed. Now you can use this.debug to log using the embedded "debug" library ([8e60bf7](https://github.com/denouche/virtual-assistant/commit/8e60bf7))
+* mock database adapter was producing errors ([7c0029a](https://github.com/denouche/virtual-assistant/commit/7c0029a))
+
+
+
 <a name="0.19.0"></a>
 # [0.19.0](https://github.com/denouche/virtual-assistant/compare/v0.18.0...v0.19.0) (2017-02-11)
 
