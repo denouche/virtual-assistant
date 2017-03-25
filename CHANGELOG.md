@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.20.0"></a>
+# [0.20.0](https://github.com/denouche/virtual-assistant/compare/v0.19.1...v0.20.0) (2017-03-25)
+
+
+### Features
+
+* allow to give strings or RegExp in feature trigger keywords ([6be5cc6](https://github.com/denouche/virtual-assistant/commit/6be5cc6))
+
+
+
 <a name="0.19.1"></a>
 ## [0.19.1](https://github.com/denouche/virtual-assistant/compare/v0.19.0...v0.19.1) (2017-02-12)
 
