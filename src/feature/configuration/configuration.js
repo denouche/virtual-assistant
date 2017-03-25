@@ -6,7 +6,7 @@ class Configuration extends AssistantFeature {
 
     static getTriggerKeywords() {
         return [
-            'configuration', 'config'
+            /\bconfig(?:uration)?\b/i
         ];
     }
 

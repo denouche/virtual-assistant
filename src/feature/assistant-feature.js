@@ -69,8 +69,16 @@ class AssistantFeature {
     }
     
     static canHandle(message) {
-        return _.some(this.getTriggerKeywords(), function(keyword) {
-            return new RegExp(keyword, 'i').test(message);
+        return _.some(this.getTriggerKeywords(), (keyword) => {
+            if(keyword instanceof RegExp) {
+                return keyword.test(message);
+            }
+            else if(keyword instanceof String || typeof(keyword) === 'string') {
+                return new RegExp('\\b' + keyword + '\\b', 'i').test(message);
+            }
+            else {
+                this.debug('canHandle', 'unable to handle keyword:', keyword, 'of type:', typeof(keyword));
+            }
         });
     }
 
