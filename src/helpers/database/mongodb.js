@@ -33,7 +33,11 @@ class MongodbDao {
             }
         }
 
-        let store = new Container();
+        let store = new Container({
+            mapperDefaults: {
+                idAttribute: '_id'
+            }
+        });
         store.registerAdapter('mongodb', adapter, { 'default': true });
         return store;
     }

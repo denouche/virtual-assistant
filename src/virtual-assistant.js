@@ -3,6 +3,7 @@ const _ = require('lodash'),
     SlackService = require('./interface/slack-service'),
     AssistantFeature = require('./feature/assistant-feature'),
     Configuration = require('./feature/configuration/configuration'),
+    StatisticsFeature = require('./feature/statistics/statistics'),
     Database = require('./helpers/database-service'),
     Statistics = require('./helpers/statistics-service'),
     Features = require('./helpers/features-service');
@@ -27,7 +28,7 @@ class VirtualAssistant {
         };
     */
     constructor(featureList, options) {
-        Features.getInstance().add(featureList, Configuration);
+        Features.getInstance().add(featureList, Configuration, StatisticsFeature);
         this.featureList = Features.getInstance().list;
         this.slackService = null;
         
