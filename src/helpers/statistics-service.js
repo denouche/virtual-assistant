@@ -36,7 +36,16 @@ class StatisticsService {
             return;
         }
         let toSave = {eventName: eventName.toLowerCase(), date: new Date(), event: event};
-        Database.collection('statistics').create(toSave);
+        var a = Database.collection('statistics').create(toSave);
+        /*a.then((document) => {
+            console.log(document);
+            Database.collection('statistics').findAll({_id: "58e8ce91b63cf05ef0c2259f"})
+            .then((document) => {
+                console.log('ici2', document)
+            }, function(err) {
+                console.log('ici22', err)
+            });
+        });*/
     }
 
 }

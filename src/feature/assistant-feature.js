@@ -44,7 +44,7 @@ class AssistantFeature {
     *   Override to add your own trigger keywords
     */
     static getTriggerKeywords() {
-        // Array of string that will trigger the feature to start
+        // Array of string or regexp that will trigger the feature to start
         throw new TypeError("Not implemented, please implement this function in sub class");
     }
 
