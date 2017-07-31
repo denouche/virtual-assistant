@@ -74,6 +74,7 @@ class Statistics extends AssistantFeature {
                 }
                 return s;
             });
+            resultStrings.push(feature.name);
             
             let ro = {}
             ro[feature.name] = `(${resultStrings.join('|')})`;
@@ -101,7 +102,6 @@ class Statistics extends AssistantFeature {
     }
 
     onText(event, from, to, text) {
-        try {
         this.send('Calcul des statistiques en cours ...');
 
         let featuresToSearch = [],
@@ -113,7 +113,7 @@ class Statistics extends AssistantFeature {
                 return;
             }
 
-            let m = text.match(new RegExp(pattern, 'g'));
+            let m = text.match(new RegExp(pattern, 'gi'));
             if(m) {
                 featuresToSearch.push(featureName);
             }
@@ -180,55 +180,20 @@ class Statistics extends AssistantFeature {
                     toSend.push(`  • ${data.name}: solicité ${data.data.length} fois par ${_.keys(byUser).length} utilisateurs différents`);
                 });
                 this.send(toSend);
-            })
-} catch(e) {
-    console.log('ouuuuuuuuuups', e)
-}
-        /*var results = chrono.parse(text);
-        console.log(results);
+            });
+
+        var results = chrono.parse(text);
+        debug(results);
 
         if(results.length > 0) {
             if(results[0].start) {
-                console.log(results[0].start.date());
+                debug(results[0].start.date());
             }
             if(results[0].end) {
-                console.log(results[0].end.date());
+                debug(results[0].end.date());
             }
         }
 
-        Features.getInstance().list
-
-
-        //Database.collection('statistics').findAll({eventName: 'feature_launch', 'event.feature': text })
-        Database.collection('statistics').findAll({
-            where: {
-                eventName: {
-                    '==': 'feature_launch'
-                },
-                'event.feature': {
-                    '==': text
-                },
-                'date': {
-                    '>=': moment('2017-04-21T22:01:12.000Z').toDate()
-                }
-            }
-        })
-        //, 'date': {'>': new Date('2017-04-01T00:00:00.000Z')}})
-            .then((data) => {
-                this.send(data.length + ' events')
-                /*let start = moment('2017-04-01T00:00:00.000Z'),
-                    end = moment('2017-04-30T23:59:00.000Z')
-                console.log(data[0].date, typeof data[0].date)
-                data = _.filter(data, function(e) {
-                    console.log('laaaaa', e.date, e.date.getDate())
-                    let d = moment(e.date);
-                    return d.isBetween(start, end);
-                })*/
-                /*let byUser = _.countBy(data, 'event.userId');
-                console.log('ICIII', byUser)
-                this.send(_.keys(byUser).length + ' unique users');
-                this.send('```'+JSON.stringify(data)+'```');
-            })*/
         this.wait();
     }
 
