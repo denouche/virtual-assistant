@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.21.1"></a>
+## [0.21.1](https://github.com/denouche/virtual-assistant/compare/v0.21.0...v0.21.1) (2017-07-31)
+
+
+### Bug Fixes
+
+* add feature name in stats list, and ignore case ([1df25c3](https://github.com/denouche/virtual-assistant/commit/1df25c3))
+
+
+
 <a name="0.21.0"></a>
 # [0.21.0](https://github.com/denouche/virtual-assistant/compare/v0.20.0...v0.21.0) (2017-07-28)
 
