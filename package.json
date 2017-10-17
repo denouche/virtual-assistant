@@ -14,7 +14,7 @@
     "js-data-adapter": "^0.8.3",
     "js-data-cloud-datastore": "^1.0.0-rc.1",
     "js-data-mongodb": "^0.7.0",
-    "js-data-sql": "^1.0.0-beta.3",
+    "js-data-sql": "^1.0.1",
     "knex": "^0.12.6",
     "lodash": "^4.17.3",
     "memory-cache": "^0.1.6",
