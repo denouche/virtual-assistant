@@ -10,19 +10,18 @@
     "debug": "^2.6.0",
     "entities": "^1.1.1",
     "javascript-state-machine": "^2.3.5",
-    "js-data": "^3.0.0-rc.9",
+    "js-data": "^3.0.2",
     "js-data-adapter": "^0.8.3",
-    "js-data-cloud-datastore": "^1.0.0-rc.1",
     "js-data-mongodb": "^0.7.0",
     "js-data-sql": "^1.0.1",
-    "knex": "^0.12.6",
+    "knex": "^0.14.6",
     "lodash": "^4.17.3",
-    "memory-cache": "^0.1.6",
+    "memory-cache": "^0.2.0",
     "mysql": "^2.13.0",
     "object-path": "^0.11.2",
     "pg": "^6.1.2",
     "sqlite3": "^3.1.8",
-    "uuid": "^3.1.0"
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "standard-version": "^4.0.0"
